@@ -335,10 +335,9 @@ namespace RatEaseW
             openFileDialog1.ShowDialog();
             Properties.Settings.Default.AlertSoundFile = openFileDialog1.FileName;
             Properties.Settings.Default.Save();
-            bool hold = IsClear;
-            IsClear = false;
-            PlaySound();
-            IsClear = hold;
+            player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
+            player.Load();
+            player.Play();
         }
 
         private void SetClearSound_Click(object sender, RoutedEventArgs e)
@@ -347,10 +346,9 @@ namespace RatEaseW
             openFileDialog1.ShowDialog();
             Properties.Settings.Default.AllClearSoundFile = openFileDialog1.FileName;
             Properties.Settings.Default.Save();
-            bool hold = IsClear;
-            IsClear = true;
-            PlaySound();
-            IsClear = hold;
+            player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
+            player.Load();
+            player.Play();
         }
 
         private void SetRectangle(object sender, RoutedEventArgs e)

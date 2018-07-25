@@ -44,9 +44,9 @@
             <Button Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Alert Sound" x:Name="SetAlertSound" FontFamily="Georgia" Click="SetAlertSound_Click"/>
             <Button Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Clear Sound" x:Name="SetClearSound" FontFamily="Georgia" Click="SetClearSound_Click"/>
             <TextBox x:Name="tbSystemName" Grid.Row="0" Grid.Column="2" Text="SystemName" Grid.ColumnSpan="2" />
-            <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="0"></TextBox>
+            <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="0" IsEnabled="False"/>
             <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="1"></TextBox>
-            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="500" Minimum="1" SmallChange="1" LargeChange="20"></Slider>
+            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="50" Minimum="1" SmallChange="1" LargeChange="10"></Slider>
             
             
             <Label Grid.Column="1" Content="SysName:" />

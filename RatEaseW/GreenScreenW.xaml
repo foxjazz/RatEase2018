@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RatEaseW"
         mc:Ignorable="d"
-        Title="GreenScreenW" Height="1020.513" Width="773.087" WindowStyle="None" Opacity="0.15" Background="PaleGreen" AllowsTransparency="True">
+        Title="GreenScreenW" Height="1020.513" Width="203.087" WindowStyle="None" Opacity="0.15" Background="PaleGreen" AllowsTransparency="True">
     <!--<Label x:Name="CaptureMode" Content="Label" HorizontalAlignment="Left" Margin="258,89,0,0" VerticalAlignment="Top" Height="24" Width="86"/>-->
     <!--<Canvas x:Name="grnCanvas" Opacity="0.1" Width="10" Height="500" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Black">
         <Rectangle x:Name="rec" Opacity="0.3" StrokeThickness="8" Stroke="#FFA81010" Fill="#FF02071D" Canvas.Top="7" Canvas.Left="10" Height="213" Width="17">
