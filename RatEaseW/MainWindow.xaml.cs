@@ -67,7 +67,8 @@ namespace RatEaseW
             top = Properties.Settings.Default.top;
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
-            outFolder.Text =Properties.Settings.Default.outFolder; 
+            outFolder.Text =Properties.Settings.Default.outFolder;
+            resultFolder.Text = Properties.Settings.Default.resultFolder;
             sc = new ScreenCapture();
             RedInSystem = false;
             reds = 0;
@@ -384,6 +385,12 @@ namespace RatEaseW
         private void SetAlertSound_Click(object sender, RoutedEventArgs e)
         {
             openFileDialog1.Title = "Pick sound alert file";
+            if (Properties.Settings.Default.AlertSoundFile.Length > 0)
+            {
+                string f = Properties.Settings.Default.AlertSoundFile;
+                openFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(f);
+            }
+
             openFileDialog1.ShowDialog();
             Properties.Settings.Default.AlertSoundFile = openFileDialog1.FileName;
             Properties.Settings.Default.Save();
@@ -395,10 +402,15 @@ namespace RatEaseW
         private void SetClearSound_Click(object sender, RoutedEventArgs e)
         {
             openFileDialog1.Title = "Pick sound all clear file";
+            if (Properties.Settings.Default.AllClearSoundFile.Length > 0)
+            {
+                string f = Properties.Settings.Default.AllClearSoundFile;
+                openFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(f);
+            }
             openFileDialog1.ShowDialog();
             Properties.Settings.Default.AllClearSoundFile = openFileDialog1.FileName;
             Properties.Settings.Default.Save();
-            player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
+            player.SoundLocation = Properties.Settings.Default.AllClearSoundFile;
             player.Load();
             player.Play();
         }
