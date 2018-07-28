@@ -119,5 +119,29 @@ namespace RatEaseW.Properties {
                 this["width"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string outFolder {
+            get {
+                return ((string)(this["outFolder"]));
+            }
+            set {
+                this["outFolder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string resultFolder {
+            get {
+                return ((string)(this["resultFolder"]));
+            }
+            set {
+                this["resultFolder"] = value;
+            }
+        }
     }
 }

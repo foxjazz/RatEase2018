@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -17,7 +18,9 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Interop;
 using System.Windows.Threading;
+
 using Microsoft.Win32;
+
 using Brush = System.Drawing.Brush;
 using Image = System.Windows.Controls.Image;
 using Rectangle = System.Windows.Shapes.Rectangle;
@@ -64,6 +67,7 @@ namespace RatEaseW
             top = Properties.Settings.Default.top;
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
+            outFolder.Text =Properties.Settings.Default.outFolder; 
             sc = new ScreenCapture();
             RedInSystem = false;
             reds = 0;
@@ -74,10 +78,15 @@ namespace RatEaseW
         public int top;
         public int left;
 
+
+        
+        
         public ScreenCapture sc { get; set; }
         
         Message msg;
         FileDialog openFileDialog1;
+        
+        
         byte red = 130;
         private int redV;
         private List<int> RedStartList;
@@ -191,7 +200,7 @@ namespace RatEaseW
                             var img2 = GetImage(capImage);
                             images.Children.Add(img2);
                             Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
-                            string fname = @"g:\tess\image" + RedCount + ".bmp";
+                            string fname = outFolder.Text + RedCount + ".bmp";
                             File.Delete(fname);
                             try
                             {
@@ -467,6 +476,66 @@ namespace RatEaseW
         {
             if((gcw.Top - Interval.Value) > 0)
                 gcw.Top -= Interval.Value;
+        }
+
+        private void pickOutput_Click(object sender, RoutedEventArgs e)
+        {
+            
+         
+
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "Set outFolder";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = outFolder.Text;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = outFolder.Text;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                outFolder.Text = dlg.FileName;
+                // Do something with selected folder string
+            }
+            Properties.Settings.Default.outFolder = outFolder.Text;
+            Properties.Settings.Default.Save();
+            dlg.Dispose();
+
+        }
+
+        private void pickResults_Click(object sender, RoutedEventArgs e)
+        {
+
+
+            var dlg = new CommonOpenFileDialog();
+            dlg.Title = "set Result Folder";
+            dlg.IsFolderPicker = true;
+            dlg.InitialDirectory = resultFolder.Text;
+
+            dlg.AddToMostRecentlyUsedList = false;
+            dlg.AllowNonFileSystemItems = false;
+            dlg.DefaultDirectory = resultFolder.Text;
+            dlg.EnsureFileExists = true;
+            dlg.EnsurePathExists = true;
+            dlg.EnsureReadOnly = false;
+            dlg.EnsureValidNames = true;
+            dlg.Multiselect = false;
+            dlg.ShowPlacesList = true;
+
+            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                resultFolder.Text = dlg.FileName;
+                // Do something with selected folder string
+            }
+            Properties.Settings.Default.resultFolder = resultFolder.Text;
+            Properties.Settings.Default.Save();
+            dlg.Dispose();
         }
     }
 }
