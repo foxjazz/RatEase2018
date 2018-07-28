@@ -18,6 +18,7 @@ using System.IO;
 using System.Windows.Interop;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Brush = System.Drawing.Brush;
 using Image = System.Windows.Controls.Image;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
@@ -134,6 +135,7 @@ namespace RatEaseW
         System.Drawing.Rectangle VRec;
         System.Drawing.Image curImage;
         private System.Drawing.Bitmap curBitmap;
+        private System.Drawing.Bitmap bm2;
         private double fRed;
         public bool foundRed { get; set; }
         private int CheckRed()
@@ -144,6 +146,7 @@ namespace RatEaseW
             bool inRed = false;
             RedCount = 0;
             fRed = 0;
+            int redHeight = 7;
             int ySectionStart = 0;
             //listRedTopHeight.Clear();
             var sp = new System.Drawing.Point(left, top);
@@ -156,7 +159,7 @@ namespace RatEaseW
             images.Children.Clear();
             //images.Children.Add(img);
             RedStartList.Clear();
-            
+            int xRedPosition = -1;
 
             int capW, capY;
             capW = 100;
@@ -175,11 +178,30 @@ namespace RatEaseW
                         fRed++;
                         if (fRed == 1)
                         {
+
+                            xRedPosition = x;
+                            if (xRedPosition > 0)
+                            { //This will set the position of starting red
+                                left = left + x;
+                                width = 1;
+                            }
                             // The - one on the y axis if to allow font kerning to get the whole name;
-                            var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x, (top + y) - 1), new System.Drawing.Point(capW + left + x,capY + top + y));
+                            var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x + 5, (top + y) - 2), new System.Drawing.Point(capW + left + x,capY + top + y));
                             //var bitmap = pushBitmap(left, top, ref curBitmap);
                             var img2 = GetImage(capImage);
                             images.Children.Add(img2);
+                            Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
+                            string fname = @"g:\tess\image" + RedCount + ".bmp";
+                            File.Delete(fname);
+                            try
+                            {
+                                resized.Save(fname, ImageFormat.Bmp);
+                            }
+                            catch 
+                            {
+                            }
+                            scaleImage(capImage);
+                            y += redHeight;
                         }
                         //lblDetectedRed.Text = "lblDetected Red";
                         IsClear = false;
@@ -188,6 +210,7 @@ namespace RatEaseW
                             RedStartList.Add(y);
                             ySectionStart = y;
                             RedCount++;
+                            
                             redV = 1;
                             inRed = true;
                         }
@@ -200,8 +223,10 @@ namespace RatEaseW
                     else {
                         if (inRed)
                         {
+                            
                             inRed = false;
                             fRed = 0;
+                            
                             listRedTopHeight.Add(new RedTopHeight { Top = ySectionStart, Height = redV + 1 });
                         }
                     }
@@ -215,6 +240,24 @@ namespace RatEaseW
                 //    lblDetectedRed.Text = "lagging scan by" + duration.ToString();
             }
             return 0;
+        }
+
+        private void scaleImage(Bitmap image)
+        {
+            var bmp = new Bitmap((int)width, (int)height);
+            var graph = Graphics.FromImage(bmp);
+
+            // uncomment for higher quality output
+            //graph.InterpolationMode = InterpolationMode.High;
+            //graph.CompositingQuality = CompositingQuality.HighQuality;
+            //graph.SmoothingMode = SmoothingMode.AntiAlias;
+
+            var scaleWidth = (int)(image.Width * 4);
+            var scaleHeight = (int)(image.Height * 4);
+            var brush = new SolidBrush(System.Drawing.Color.Black);
+
+            graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
+            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
         }
         private BitmapImage bmi(Bitmap bitmap)
         {
