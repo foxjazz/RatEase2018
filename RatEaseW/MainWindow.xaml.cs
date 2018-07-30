@@ -33,23 +33,7 @@ namespace RatEaseW
     /// 
     public partial class MainWindow : Window
     {
-        //public static BitmapImage ToBitmapImage(this Bitmap bitmap)
-        //{
-        //    using (var memory = new MemoryStream())
-        //    {
-        //        bitmap.Save(memory, ImageFormat.Png);
-        //        memory.Position = 0;
-
-        //        var bitmapImage = new BitmapImage();
-        //        bitmapImage.BeginInit();
-        //        bitmapImage.StreamSource = memory;
-        //        bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-        //        bitmapImage.EndInit();
-        //        bitmapImage.Freeze();
-
-        //        return bitmapImage;
-        //    }
-        //}
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -58,6 +42,8 @@ namespace RatEaseW
             dtimer = new DispatcherTimer();
             dtimer.Interval = new TimeSpan(0,0,0,0,250);
             dtimer.Tick += Dtimer_Tick;
+
+            
             msg = CurrentData.Instance.RedData;
             openFileDialog1 = new OpenFileDialog();
             player = new System.Media.SoundPlayer();
@@ -68,10 +54,14 @@ namespace RatEaseW
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
             outFolder.Text =Properties.Settings.Default.outFolder;
-            resultFolder.Text = Properties.Settings.Default.resultFolder;
+            //resultFolder.Text = Properties.Settings.Default.resultFolder;
             sc = new ScreenCapture();
             RedInSystem = false;
             reds = 0;
+            populateResult = true;
+            RedCheckStart = DateTime.Now.AddSeconds(-5);
+            waitASecond = false;
+            waitIterations = 0;
         }
         public GreenScreenW gcw { get; set; }
         public int width { get; set; }
@@ -95,16 +85,41 @@ namespace RatEaseW
         public int cnt { get; set; }
         private bool RedInSystem;
         private bool gcwShowing;
-
+        private bool waitASecond;
         private int reds;
         private int redsPrev;
+        private DateTime RedCheckStart;
+        private bool populateResult;
+
+        private int waitIterations;
         //public System.Drawing.Point pTopleft { get; set; }
         //public System.Drawing.Point pBottomRight { get; set; }
         public int iteration { get; set; }
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
-            reds = CheckRed();
+            if (waitIterations > 0)
+            {
+                waitIterations--;
+                dtimer.Stop();
+            }
+            if (waitASecond)
+            {
+                waitIterations = 5;
+                waitASecond = false;
+
+            }
+
+            if (populateResult)
+            {
+                populateRedLine();
+                populateResult = false;
+            }
+            if ((DateTime.Now - RedCheckStart).TotalSeconds > 6)
+            {
+                
+                reds = CheckRed();
+            }
             if (reds != redsPrev)
             {
                 redCount.Text = "Reds:" + reds;
@@ -113,6 +128,7 @@ namespace RatEaseW
             if (reds > 0 && RedInSystem == false)
             {
                 RedInSystem = true;
+                RedCheckStart = DateTime.Now;
                 redCount.Text = "Reds:" + reds;
                 PlaySound();
             }
@@ -122,6 +138,8 @@ namespace RatEaseW
                 RedInSystem = false;
                 PlaySound();
             }
+
+
             //if (subred == null)
             //    subred = new SmaRedis();
             //if (!subred.Connected)
@@ -166,7 +184,7 @@ namespace RatEaseW
             
             curBitmap = (Bitmap) curImage;
             //var img = GetImage(curBitmap);
-            images.Children.Clear();
+            //images.Children.Clear();
             //images.Children.Add(img);
             RedStartList.Clear();
             int xRedPosition = -1;
@@ -199,12 +217,13 @@ namespace RatEaseW
                             var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x + 5, (top + y) - 2), new System.Drawing.Point(capW + left + x,capY + top + y));
                             //var bitmap = pushBitmap(left, top, ref curBitmap);
                             var img2 = GetImage(capImage);
-                            images.Children.Add(img2);
+                            //images.Children.Add(img2);
                             Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
-                            string fname = outFolder.Text + RedCount + ".bmp";
-                            File.Delete(fname);
+                            string fname = outFolder.Text + "\\t" + RedCount + ".bmp";
+                           
                             try
                             {
+                                File.Delete(fname);
                                 resized.Save(fname, ImageFormat.Bmp);
                             }
                             catch 
@@ -244,6 +263,9 @@ namespace RatEaseW
                 duration = DateTime.Now.Subtract(ts);
                 if (RedCount > 0)
                 {
+                    File.CreateText(outFolder.Text + "\\newset").Dispose();
+                    populateResult = true;
+                    RedCheckStart = DateTime.Now;
                     return RedCount;
                 }
                 //if (duration.Seconds > 1)
@@ -306,7 +328,8 @@ namespace RatEaseW
             }
             return cbm;
         }
-        DispatcherTimer dtimer;
+        DispatcherTimer dtimer, rtimer;
+
         System.Media.SoundPlayer player;
         public bool IsClear { get; set; }
         SmaRedis subred;
@@ -362,7 +385,7 @@ namespace RatEaseW
      
         private void Start_Click(object sender, RoutedEventArgs e)
         {
-            
+            populateResult = true;
             if (gcw == null)
                 MessageBox.Show("Set the damn position");
             height = (int)gcw.Height;
@@ -521,33 +544,54 @@ namespace RatEaseW
 
         }
 
-        private void pickResults_Click(object sender, RoutedEventArgs e)
+        private void populateRedLine()
         {
-
-
-            var dlg = new CommonOpenFileDialog();
-            dlg.Title = "set Result Folder";
-            dlg.IsFolderPicker = true;
-            dlg.InitialDirectory = resultFolder.Text;
-
-            dlg.AddToMostRecentlyUsedList = false;
-            dlg.AllowNonFileSystemItems = false;
-            dlg.DefaultDirectory = resultFolder.Text;
-            dlg.EnsureFileExists = true;
-            dlg.EnsurePathExists = true;
-            dlg.EnsureReadOnly = false;
-            dlg.EnsureValidNames = true;
-            dlg.Multiselect = false;
-            dlg.ShowPlacesList = true;
-
-            if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            var list = Directory.GetFiles(outFolder.Text, "*.txt");
+            redline.Text = "";
+            foreach (var file in list)
             {
-                resultFolder.Text = dlg.FileName;
-                // Do something with selected folder string
+                try
+                {
+                    waitASecond = true;
+                    string data = File.ReadAllText(file).Replace("\n", "");
+                    if(data.Length > 0)
+                    redline.Text += data + "; ";
+                }
+                catch
+                {
+                }
+                
             }
-            Properties.Settings.Default.resultFolder = resultFolder.Text;
-            Properties.Settings.Default.Save();
-            dlg.Dispose();
+            redline.Text += " nv";
+            waitASecond = false;
         }
+        //private void pickResults_Click(object sender, RoutedEventArgs e)
+        //{
+
+
+        //    var dlg = new CommonOpenFileDialog();
+        //    dlg.Title = "set Result Folder";
+        //    dlg.IsFolderPicker = true;
+        //    dlg.InitialDirectory = resultFolder.Text;
+
+        //    dlg.AddToMostRecentlyUsedList = false;
+        //    dlg.AllowNonFileSystemItems = false;
+        //    dlg.DefaultDirectory = resultFolder.Text;
+        //    dlg.EnsureFileExists = true;
+        //    dlg.EnsurePathExists = true;
+        //    dlg.EnsureReadOnly = false;
+        //    dlg.EnsureValidNames = true;
+        //    dlg.Multiselect = false;
+        //    dlg.ShowPlacesList = true;
+
+        //    if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+        //    {
+        //        resultFolder.Text = dlg.FileName;
+        //        // Do something with selected folder string
+        //    }
+        //    Properties.Settings.Default.resultFolder = resultFolder.Text;
+        //    Properties.Settings.Default.Save();
+        //    dlg.Dispose();
+        //}
     }
 }
