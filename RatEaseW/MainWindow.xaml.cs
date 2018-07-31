@@ -43,7 +43,7 @@ namespace RatEaseW
             dtimer.Interval = new TimeSpan(0,0,0,0,250);
             dtimer.Tick += Dtimer_Tick;
 
-            
+            isSettingRect = false;
             msg = CurrentData.Instance.RedData;
             openFileDialog1 = new OpenFileDialog();
             player = new System.Media.SoundPlayer();
@@ -338,6 +338,8 @@ namespace RatEaseW
             }
             return cbm;
         }
+
+        private bool isSettingRect;
         DispatcherTimer dtimer, rtimer;
 
         System.Media.SoundPlayer player;
@@ -381,15 +383,19 @@ namespace RatEaseW
             populateResult = true;
             if (gcw == null)
                 MessageBox.Show("Set the damn position");
-            height = (int)gcw.Height;
-            width = (int)gcw.Width;
-            top = (int)gcw.Top;
-            left = (int)gcw.Left;
-            Properties.Settings.Default.left = left;
-            Properties.Settings.Default.top = top;
-            Properties.Settings.Default.width = width;
-            Properties.Settings.Default.height = height;
-            Properties.Settings.Default.Save();
+            if (isSettingRect)
+            {
+                height = (int) gcw.Height;
+                width = (int) gcw.Width;
+                top = (int) gcw.Top;
+                left = (int) gcw.Left;
+                Properties.Settings.Default.left = left;
+                Properties.Settings.Default.top = top;
+                Properties.Settings.Default.width = width;
+                Properties.Settings.Default.height = height;
+                Properties.Settings.Default.Save();
+            }
+            isSettingRect = false;
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
             dtimer.Start();
             BtnStart.Content = "Started";
@@ -433,6 +439,9 @@ namespace RatEaseW
 
         private void SetRectangle(object sender, RoutedEventArgs e)
         {
+            dtimer.Stop();
+            BtnStart.Content = "Stopped";
+            isSettingRect = true;
             left = Properties.Settings.Default.left;
             top = Properties.Settings.Default.top;
             width = Properties.Settings.Default.width;
@@ -617,11 +626,17 @@ namespace RatEaseW
                 return data;
             }
         }
+
+        private void copy_Click(object sender, RoutedEventArgs e)
+        {
+            Clipboard.SetText(redline.Text);
+        }
+
         private void populateRedLine()
         {
             string data;
             string sysfile = outFolder.Text + "\\system.txt";
-            redline.Text = readText(sysfile);
+            redline.Text = readText(sysfile).Replace("\n","") + ": ";
             var list = Directory.GetFiles(outFolder.Text, "t*.txt");
 
             foreach (var file in list)
@@ -629,8 +644,8 @@ namespace RatEaseW
                 try
                 {
                     waitASecond = true;
-                    data = readText(file);
-                    data.Replace("\n", "");
+                    data = readText(file).Replace("\n","");
+                    
                     if(data.Length > 0)
                     redline.Text += data + "; ";
                 }

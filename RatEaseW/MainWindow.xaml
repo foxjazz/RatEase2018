@@ -62,7 +62,8 @@
             
             <Button x:Name="pickOutput" Grid.Row="5" Grid.Column="0" Height="25" VerticalAlignment="Top" Click="pickOutput_Click">Set Output</Button>
             <TextBox x:Name="outFolder" Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3"></TextBox>
-            <TextBox x:Name="redline" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="6"></TextBox>
+            <TextBox x:Name="redline" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="6"></TextBox>
+            <Button x:Name="copy" Grid.Row="6" Grid.Column="0" Click="copy_Click">Cpy</Button>
         </Grid>
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Grid.Row="1" Height="510" BorderBrush="Azure" >
             <Image x:Name="VImage" Stretch="None" Source="{Binding CurrentData.VImg}"/>
