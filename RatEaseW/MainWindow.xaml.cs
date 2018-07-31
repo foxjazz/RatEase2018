@@ -583,6 +583,7 @@ namespace RatEaseW
             Bitmap resized = new Bitmap(curBitmap, new System.Drawing.Size(curBitmap.Width * 2, curBitmap.Height * 2));
             string fname = outFolder.Text + "\\system.bmp";
             resized.Save(fname);
+            resized.Dispose();
             if (gcwShowing)
                 gcw.Hide();
             if(File.Exists(outFolder.Text + "\\system.txt"))
@@ -599,23 +600,28 @@ namespace RatEaseW
             gcw.Show();
         }
 
+        private string readText(string fn)
+        {
+            string data = "";
+            if (File.Exists(fn))
+            {
+                var fs = new FileStream(fn, FileMode.Open,
+                    FileAccess.Read, FileShare.ReadWrite);
+                StreamReader sr = new StreamReader(fs);
+                data = sr.ReadToEnd();
+                fs.Dispose();
+                return data;
+            }
+            else
+            {
+                return data;
+            }
+        }
         private void populateRedLine()
         {
             string data;
             string sysfile = outFolder.Text + "\\system.txt";
-            if(File.Exists(sysfile))
-            {
-                var fs = new FileStream(sysfile, FileMode.Open,
-                    FileAccess.Read, FileShare.ReadWrite);
-                StreamReader sr = new StreamReader(fs);
-                data = sr.ReadToEnd();
-//                data = File.ReadAllText(outFolder.Text + "\\system.txt").Replace("\n", "");
-                redline.Text = data;
-            }
-            else
-            {
-                redline.Text = "";
-            }
+            redline.Text = readText(sysfile);
             var list = Directory.GetFiles(outFolder.Text, "t*.txt");
 
             foreach (var file in list)
@@ -623,7 +629,8 @@ namespace RatEaseW
                 try
                 {
                     waitASecond = true;
-                    data = File.ReadAllText(file).Replace("\n", "");
+                    data = readText(file);
+                    data.Replace("\n", "");
                     if(data.Length > 0)
                     redline.Text += data + "; ";
                 }
