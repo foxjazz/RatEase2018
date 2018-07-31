@@ -143,5 +143,53 @@ namespace RatEaseW.Properties {
                 this["resultFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int sLeft {
+            get {
+                return ((int)(this["sLeft"]));
+            }
+            set {
+                this["sLeft"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int sHeight {
+            get {
+                return ((int)(this["sHeight"]));
+            }
+            set {
+                this["sHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int sTop {
+            get {
+                return ((int)(this["sTop"]));
+            }
+            set {
+                this["sTop"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int sWidth {
+            get {
+                return ((int)(this["sWidth"]));
+            }
+            set {
+                this["sWidth"] = value;
+            }
+        }
     }
 }

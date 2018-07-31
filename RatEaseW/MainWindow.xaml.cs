@@ -55,6 +55,13 @@ namespace RatEaseW
             height = Properties.Settings.Default.height;
             outFolder.Text =Properties.Settings.Default.outFolder;
             //resultFolder.Text = Properties.Settings.Default.resultFolder;
+
+            //System region Setting
+            sLeft = Properties.Settings.Default.sLeft;
+            sTop = Properties.Settings.Default.sTop;
+            sWidth = Properties.Settings.Default.sWidth;
+            sHeight = Properties.Settings.Default.sHeight;
+
             sc = new ScreenCapture();
             RedInSystem = false;
             reds = 0;
@@ -62,6 +69,7 @@ namespace RatEaseW
             RedCheckStart = DateTime.Now.AddSeconds(-5);
             waitASecond = false;
             waitIterations = 0;
+            setRectangle = true;
         }
         public GreenScreenW gcw { get; set; }
         public int width { get; set; }
@@ -70,14 +78,18 @@ namespace RatEaseW
         public int left;
 
 
-        
-        
+
+        private int sWidth;
+        private int sHeight;
+        private int sTop;
+        private int sLeft;
+
         public ScreenCapture sc { get; set; }
         
         Message msg;
         FileDialog openFileDialog1;
-        
-        
+
+        private bool setRectangle;
         byte red = 130;
         private int redV;
         private List<int> RedStartList;
@@ -452,7 +464,7 @@ namespace RatEaseW
                 width = 4;
             if (height < 0)
                 height = 500;
-            if (width > 20)
+            if (width > 10)
                 width = 4;
             gcw.Top = top;
             gcw.Left = left;
@@ -469,8 +481,12 @@ namespace RatEaseW
 
         private void thinner(object sender, RoutedEventArgs e)
         {
+            int test=0;
             if(gcw.Width > 1)
-                gcw.Width -= 1;
+                test = (int)gcw.Width - (int)Interval.Value;
+            if (test > 0)
+                gcw.Width = test;
+
         }
 
         private void MoveRight(object sender, RoutedEventArgs e)
@@ -487,7 +503,8 @@ namespace RatEaseW
 
         private void Interval_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            txtInterval.Text = e.NewValue.ToString();
+            Interval.Value = (int) e.NewValue;
+            txtInterval.Text = ((int) e.NewValue).ToString();
         }
 
         private void LeftArrow_Click(object sender, RoutedEventArgs e)
@@ -544,16 +561,64 @@ namespace RatEaseW
 
         }
 
+        private void SetSystemRectangle(object sender, RoutedEventArgs e)
+        {
+            sLeft = Properties.Settings.Default.sLeft;
+            sTop = Properties.Settings.Default.sTop;
+            sWidth = Properties.Settings.Default.sWidth;
+            sHeight = Properties.Settings.Default.sHeight;
+           
+            gcw.Top = sTop;
+            gcw.Left = sLeft;
+            gcw.Width = sWidth;
+            gcw.Height = sHeight;
+            gcwShowing = true;
+            gcw.Show();
+        }
+
+        private void FinishSystemRectanglee_Click(object sender, RoutedEventArgs e)
+        {
+            sHeight = (int)gcw.Height;
+            sWidth = (int)gcw.Width;
+            sTop = (int)gcw.Top;
+            sLeft = (int)gcw.Left;
+            Properties.Settings.Default.sLeft = sLeft;
+            Properties.Settings.Default.sTop = sTop;
+            Properties.Settings.Default.sWidth = sWidth;
+            Properties.Settings.Default.sHeight = sHeight;
+            Properties.Settings.Default.Save();
+            var sp = new System.Drawing.Point(sLeft, sTop);
+            var dp = new System.Drawing.Point(sLeft + sWidth, sTop + sHeight);
+
+            curImage = sc.Capture(sp, dp);
+
+            curBitmap = (Bitmap)curImage;
+            string fname = outFolder.Text + "\\system.bmp";
+            curBitmap.Save(fname);
+            if (gcwShowing)
+                gcw.Hide();
+        }
+
         private void populateRedLine()
         {
-            var list = Directory.GetFiles(outFolder.Text, "*.txt");
-            redline.Text = "";
+            string data;
+            if(File.Exists(outFolder.Text + "\\system.txt"))
+            {
+                data = File.ReadAllText("system.txt").Replace("\n", "");
+                redline.Text = data;
+            }
+            else
+            {
+                redline.Text = "";
+            }
+            var list = Directory.GetFiles(outFolder.Text, "t*.txt");
+
             foreach (var file in list)
             {
                 try
                 {
                     waitASecond = true;
-                    string data = File.ReadAllText(file).Replace("\n", "");
+                    data = File.ReadAllText(file).Replace("\n", "");
                     if(data.Length > 0)
                     redline.Text += data + "; ";
                 }

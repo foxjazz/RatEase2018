@@ -15,7 +15,7 @@
             <RowDefinition Height="225"></RowDefinition>
             <RowDefinition Height="950"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="400" Grid.Row="0">
+        <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
@@ -27,6 +27,7 @@
                 <RowDefinition Height="25"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
@@ -47,12 +48,14 @@
             <TextBox x:Name="tbSystemName" Grid.Row="0" Grid.Column="2" Text="SystemName" Grid.ColumnSpan="2" />
             <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="0" IsEnabled="False"/>
             <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="1"></TextBox>
-            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="50" Minimum="1" SmallChange="1" LargeChange="10"></Slider>
+            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="50" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3"></Slider>
             
             
             <Label Grid.Column="1" Content="SysName:" />
             <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set Rectangle" HorizontalAlignment="Right" Width="67" Click="SetRectangle"/>
-            <ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />
+            <Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle"/>
+            <Button x:Name="FinishSystemRectanglee" Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="2" Content="Finish System Rectangle" HorizontalAlignment="Right" Width="120" Click="FinishSystemRectanglee_Click" />
+            <!--<ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />-->
             <TextBox x:Name="coord" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"></TextBox>
             
             <Button x:Name="pickOutput" Grid.Row="5" Grid.Column="0" Height="25" VerticalAlignment="Top" Click="pickOutput_Click">Set Output</Button>
