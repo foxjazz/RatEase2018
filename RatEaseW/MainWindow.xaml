@@ -39,7 +39,9 @@
             <Button Grid.Row="3" x:Name="LeftArrow" Content="&lt;&lt;" Click="LeftArrow_Click"/>
             <Button Grid.Row="3" Grid.Column="1" Content=">>" Click="MoveRight"/>
             <Button Grid.Row="2" Grid.Column="3" Content="Down" Click="MoveDown"/>
+            
             <Button x:Name="Up" Grid.Row="1" Grid.Column="3" Click="Up_Click">Up</Button>
+            <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="2" Content="add width" Height="26" VerticalAlignment="Bottom" Click="addWidth_Click" />
             <Button Grid.Row="2" Grid.Column="2" Content="thin" Height="26" VerticalAlignment="Bottom" Click="thinner"/>
             <Button x:Name="Extend" Grid.Row="3" Grid.Column="2" Content="extend" Click="extend"/>
             <Button Grid.Row="3" Grid.Column="3" Content="Start" Height="27" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" />
@@ -53,7 +55,7 @@
             
             <Label Grid.Column="1" Content="SysName:" />
             <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set Rectangle" HorizontalAlignment="Right" Width="67" Click="SetRectangle"/>
-            <Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle"/>
+            <Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle" MouseRightButtonUp="SetSystemRectanglee_MouseRightButtonUp"/>
             <Button x:Name="FinishSystemRectanglee" Grid.Column="5" Grid.Row="1" Grid.ColumnSpan="2" Content="Finish System Rectangle" HorizontalAlignment="Right" Width="120" Click="FinishSystemRectanglee_Click" />
             <!--<ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />-->
             <TextBox x:Name="coord" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3"></TextBox>

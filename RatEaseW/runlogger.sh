@@ -8,6 +8,7 @@ declare -i sys;
 declare -i idx;
 #let sys =: 0;
 
+
 while :
 	do
 			
@@ -21,7 +22,8 @@ while :
 			
 			if [ -f newset ]
 			then
-			tesseract system.bmp system -l eng -oem 3 
+			
+			
 			echo "newset file exists"
 			rm newset
 			
@@ -39,8 +41,13 @@ while :
 			fi
 			
 			#pause a second.
+			if [ ! -f system.txt ]
+			then
+				tesseract system.bmp system -l eng -oem 3 
+			fi
 			echo "sleep1"
 			sleep 1;
 			
 	done
 echo "stopped"
+

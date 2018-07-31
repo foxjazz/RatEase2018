@@ -280,8 +280,6 @@ namespace RatEaseW
                     RedCheckStart = DateTime.Now;
                     return RedCount;
                 }
-                //if (duration.Seconds > 1)
-                //    lblDetectedRed.Text = "lagging scan by" + duration.ToString();
             }
             return 0;
         }
@@ -369,23 +367,6 @@ namespace RatEaseW
                     player.Load();
                     player.Play();
                 }
-                //if (!IsClear)
-                //{
-                //    //subred.publish(tbSysName.Text + " vertical=" + redV);
-                //    var msg = new Message();
-                //    msg.Redcount = RedCount;
-                //    msg.SystemText = tbSystemName.Text;
-                //    //msg.System = TitleImage;
-                //    var rth = listRedTopHeight.FirstOrDefault();
-                //    if (rth != null)
-                //        msg.FirstRed = sc.CaptureRed(VRec, rth);
-                //    subred.publish(msg);
-
-                //}
-                //if (subred != null && IsClear)
-                //    subred.publish(tbSystemName.Text + " Clear ");
-
-
             }
             catch (Exception ex)
             {
@@ -488,6 +469,10 @@ namespace RatEaseW
                 gcw.Width = test;
 
         }
+        private void addWidth_Click(object sender, RoutedEventArgs e)
+        {
+            gcw.Width += (int)Interval.Value;
+        }
 
         private void MoveRight(object sender, RoutedEventArgs e)
         {
@@ -563,11 +548,13 @@ namespace RatEaseW
 
         private void SetSystemRectangle(object sender, RoutedEventArgs e)
         {
+            
             sLeft = Properties.Settings.Default.sLeft;
             sTop = Properties.Settings.Default.sTop;
             sWidth = Properties.Settings.Default.sWidth;
             sHeight = Properties.Settings.Default.sHeight;
            
+            
             gcw.Top = sTop;
             gcw.Left = sLeft;
             gcw.Width = sWidth;
@@ -591,20 +578,38 @@ namespace RatEaseW
             var dp = new System.Drawing.Point(sLeft + sWidth, sTop + sHeight);
 
             curImage = sc.Capture(sp, dp);
-
+            
             curBitmap = (Bitmap)curImage;
+            Bitmap resized = new Bitmap(curBitmap, new System.Drawing.Size(curBitmap.Width * 2, curBitmap.Height * 2));
             string fname = outFolder.Text + "\\system.bmp";
-            curBitmap.Save(fname);
+            resized.Save(fname);
             if (gcwShowing)
                 gcw.Hide();
+            if(File.Exists(outFolder.Text + "\\system.txt"))
+                File.Delete(outFolder.Text + "\\system.txt");
+        }
+
+        private void SetSystemRectanglee_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            gcw.Top = 50;
+            gcw.Left = 50;
+            gcw.Width = 80;
+            gcw.Height = 8;
+            gcwShowing = true;
+            gcw.Show();
         }
 
         private void populateRedLine()
         {
             string data;
-            if(File.Exists(outFolder.Text + "\\system.txt"))
+            string sysfile = outFolder.Text + "\\system.txt";
+            if(File.Exists(sysfile))
             {
-                data = File.ReadAllText("system.txt").Replace("\n", "");
+                var fs = new FileStream(sysfile, FileMode.Open,
+                    FileAccess.Read, FileShare.ReadWrite);
+                StreamReader sr = new StreamReader(fs);
+                data = sr.ReadToEnd();
+//                data = File.ReadAllText(outFolder.Text + "\\system.txt").Replace("\n", "");
                 redline.Text = data;
             }
             else
