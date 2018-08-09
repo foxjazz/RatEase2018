@@ -437,8 +437,11 @@ namespace RatEaseW
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             populateResult = true;
-       
-       
+            if (gcwLocal.Width > 4)
+            {
+                gcwLocal.Width = 4;
+            }
+                
                 height = (int) gcwLocal.Height;
                 width = (int) gcwLocal.Width;
                 top = (int) gcwLocal.Top;
@@ -450,7 +453,7 @@ namespace RatEaseW
                 Properties.Settings.Default.Save();
        
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
-            dtimer.Start();
+            
             BtnStart.Content = "Started";
             if (gcwShowing)
             {
@@ -460,6 +463,9 @@ namespace RatEaseW
             GreenGrid.Visibility = Visibility.Collapsed;
             Status.Background = Brushes.LightSeaGreen;
             Status.Content = "Started";
+            eveSystemBid = 0;
+            dtimer.Start();
+
         }
 
         private void SetAlertSound_Click(object sender, RoutedEventArgs e)
