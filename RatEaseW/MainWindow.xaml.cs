@@ -20,8 +20,9 @@ using System.Windows.Interop;
 using System.Windows.Threading;
 
 using Microsoft.Win32;
-
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using Brush = System.Drawing.Brush;
+using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
 using Rectangle = System.Windows.Shapes.Rectangle;
 
@@ -47,7 +48,8 @@ namespace RatEaseW
             msg = CurrentData.Instance.RedData;
             openFileDialog1 = new OpenFileDialog();
             player = new System.Media.SoundPlayer();
-            gcw = new GreenScreenW();
+            gcwLocal = new GreenScreenW();
+            gcwSystem = new GreenScreenW();
             //VRec = new System.Drawing.Rectangle();
             left = Properties.Settings.Default.left;
             top = Properties.Settings.Default.top;
@@ -70,15 +72,20 @@ namespace RatEaseW
             waitASecond = false;
             waitIterations = 0;
             setRectangle = true;
+            GreenGrid.Visibility = Visibility.Visible;
+            checkSystemCounter = 0;
         }
-        public GreenScreenW gcw { get; set; }
+        public GreenScreenW gcwLocal { get; set; }
+        public GreenScreenW gcwSystem { get; set; }
         public int width { get; set; }
         public int height { get; set; }
         public int top;
         public int left;
 
 
+        private enum GreenScreen {Local, System};
 
+        private GreenScreen greenType;
         private int sWidth;
         private int sHeight;
         private int sTop;
@@ -104,12 +111,26 @@ namespace RatEaseW
         private bool populateResult;
 
         private int waitIterations;
+        
+        private int eveSystemBid;
+
+        private int checkSystemCounter;
+
+        private bool isSystemDifferent;
         //public System.Drawing.Point pTopleft { get; set; }
         //public System.Drawing.Point pBottomRight { get; set; }
         public int iteration { get; set; }
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
+            if (checkSystemCounter > 6)
+            {
+                isSystemDifferent = CheckEveSystem();
+                checkSystemCounter = 0;  // only want to check every few seconds.
+                if (isSystemDifferent)
+                    checkSystemCounter = -20;  //set it back to allow time to change again.
+            }
+            checkSystemCounter++;
             if (waitIterations > 0)
             {
                 waitIterations--;
@@ -178,6 +199,41 @@ namespace RatEaseW
         private System.Drawing.Bitmap bm2;
         private double fRed;
         public bool foundRed { get; set; }
+
+        private bool CheckEveSystem()
+        {
+            if (curImage == null)
+                return false;
+            var sp = new System.Drawing.Point();
+            var dp = new System.Drawing.Point();
+            sp.X = sLeft;
+            sp.Y = sTop;
+            dp.X = sWidth + sLeft;
+            dp.Y = sHeight + sTop;
+            curImage = sc.Capture(sp, dp);
+            int currentEveSystemBid = 0;
+            curBitmap = (Bitmap)curImage;
+
+            for (int x = 0; x < sWidth; x++)
+            {
+                for (int y = 0; y < sHeight; y++)
+                {
+                    var pixel = curBitmap.GetPixel(x, y);
+                    if (pixel.R == 0xFF && pixel.B == 0xFF && pixel.G == 0xFF)
+                    {
+                        currentEveSystemBid++;
+                    }
+                }
+            }
+            if (eveSystemBid != currentEveSystemBid)
+            {
+                //push system bmp
+                SaveEveSystemBMP();  //If EveSystem bitmap white bits are different, we are likely in a new system.
+                eveSystemBid = currentEveSystemBid;
+                return true;
+            }
+            return false;
+        }
         private int CheckRed()
         {
             if (listRedTopHeight == null)
@@ -381,27 +437,29 @@ namespace RatEaseW
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             populateResult = true;
-            if (gcw == null)
-                MessageBox.Show("Set the damn position");
-            if (isSettingRect)
-            {
-                height = (int) gcw.Height;
-                width = (int) gcw.Width;
-                top = (int) gcw.Top;
-                left = (int) gcw.Left;
+       
+       
+                height = (int) gcwLocal.Height;
+                width = (int) gcwLocal.Width;
+                top = (int) gcwLocal.Top;
+                left = (int) gcwLocal.Left;
                 Properties.Settings.Default.left = left;
                 Properties.Settings.Default.top = top;
                 Properties.Settings.Default.width = width;
                 Properties.Settings.Default.height = height;
                 Properties.Settings.Default.Save();
-            }
-            isSettingRect = false;
+       
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
             dtimer.Start();
             BtnStart.Content = "Started";
-            if(gcwShowing)
-                gcw.Hide();
-
+            if (gcwShowing)
+            {
+                gcwLocal.Hide();
+                gcwSystem.Hide();   
+            }
+            GreenGrid.Visibility = Visibility.Collapsed;
+            Status.Background = Brushes.LightSeaGreen;
+            Status.Content = "Started";
         }
 
         private void SetAlertSound_Click(object sender, RoutedEventArgs e)
@@ -440,7 +498,7 @@ namespace RatEaseW
         private void SetRectangle(object sender, RoutedEventArgs e)
         {
             dtimer.Stop();
-            BtnStart.Content = "Stopped";
+            BtnStart.Content = "Start";
             isSettingRect = true;
             left = Properties.Settings.Default.left;
             top = Properties.Settings.Default.top;
@@ -456,12 +514,37 @@ namespace RatEaseW
                 height = 500;
             if (width > 10)
                 width = 4;
-            gcw.Top = top;
-            gcw.Left = left;
-            gcw.Width = width;
-            gcw.Height = height;
+            gcwLocal.Top = top;
+            gcwLocal.Left = left;
+            gcwLocal.Width = width;
+            gcwLocal.Height = height;
             gcwShowing = true;
-            gcw.Show();
+            gcwLocal.Show();
+
+            sLeft = Properties.Settings.Default.sLeft;
+            sTop = Properties.Settings.Default.sTop;
+            sWidth = Properties.Settings.Default.sWidth;
+            sHeight = Properties.Settings.Default.sHeight;
+            if (sLeft < 0)
+                sLeft = 40;
+            if (sHeight < 5 || sHeight > 100)
+                sHeight = 20;
+            if (sWidth < 20)
+                sWidth = 60;
+            if (sTop< 5)
+                sTop = 10;
+
+            gcwSystem.Top = sTop;
+            gcwSystem.Left = sLeft;
+            gcwSystem.Width = sWidth;
+            gcwSystem.Height = sHeight;
+            
+            gcwSystem.Show();
+            greenType = GreenScreen.Local;
+            GreenControlMode.Content = "G Mode: Local";
+            GreenGrid.Visibility = Visibility.Visible;
+            Status.Background = Brushes.LightCoral;
+            Status.Content = "Stopped";
 
         }
 
@@ -472,27 +555,69 @@ namespace RatEaseW
         private void thinner(object sender, RoutedEventArgs e)
         {
             int test=0;
-            if(gcw.Width > 1)
-                test = (int)gcw.Width - (int)Interval.Value;
-            if (test > 0)
-                gcw.Width = test;
+
+            if (greenType == GreenScreen.Local)
+            {
+                if (gcwLocal.Width > 1)
+                    test = (int) gcwLocal.Width - (int) Interval.Value;
+                if (test > 0)
+                    gcwLocal.Width = test;
+            }
+            else
+            {
+                if (gcwSystem.Width > 1)
+                    test = (int)gcwSystem.Width - (int)Interval.Value;
+                if (test > 0)
+                    gcwSystem.Width = test;
+            }
 
         }
         private void addWidth_Click(object sender, RoutedEventArgs e)
         {
-            gcw.Width += (int)Interval.Value;
+            if (greenType == GreenScreen.Local)
+            {
+                gcwLocal.Width += (int) Interval.Value;
+            }
+            else
+            {
+                gcwSystem.Width += (int)Interval.Value;
+            }
         }
-
+        private void subHeigth_Click(object sender, RoutedEventArgs e)
+        {
+            if (greenType == GreenScreen.Local)
+            {
+                gcwLocal.Height -= (int)Interval.Value;
+            }
+            else
+            {
+                gcwSystem.Height -= (int)Interval.Value;
+            }
+        }
         private void MoveRight(object sender, RoutedEventArgs e)
         {
-            gcw.Left += Interval.Value;
+            if (greenType == GreenScreen.Local)
+            {
+                gcwLocal.Left += Interval.Value;
+            }
+            else
+            {
+                gcwSystem.Left += Interval.Value;
+            }
         }
 
       
 
         private void extend(object sender, RoutedEventArgs e)
         {
-            gcw.Height += Interval.Value;
+            if (greenType == GreenScreen.Local)
+            {
+                gcwLocal.Height += Interval.Value;
+            }
+            else
+            {
+                gcwSystem.Height += Interval.Value;
+            }
         }
 
         private void Interval_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -503,25 +628,52 @@ namespace RatEaseW
 
         private void LeftArrow_Click(object sender, RoutedEventArgs e)
         {
-            double test = gcw.Left -= Interval.Value;
-            if(test > 0)
-                gcw.Left -= Interval.Value;
+            
+            if (greenType == GreenScreen.Local)
+            {
+                double test = gcwLocal.Left -= Interval.Value;
+                if (test > 0)
+                    gcwLocal.Left -= Interval.Value;
+            }
+            else
+            {
+                double test = gcwSystem.Left -= Interval.Value;
+                if (test > 0)
+                    gcwSystem.Left -= Interval.Value;
+            }
+           
+            
         }
 
         private void MoveDown(object sender, RoutedEventArgs e)
         {
-            gcw.Top += Interval.Value;
+            if (greenType == GreenScreen.Local)
+            {
+                gcwLocal.Top += Interval.Value;
+            }
+            else
+            {
+                gcwSystem.Top += Interval.Value;
+            }
         }
 
         private void BtnStart_Unloaded(object sender, RoutedEventArgs e)
         {
-            gcw.Close();
+            gcwLocal.Close();
         }
 
         private void Up_Click(object sender, RoutedEventArgs e)
         {
-            if((gcw.Top - Interval.Value) > 0)
-                gcw.Top -= Interval.Value;
+            if (greenType == GreenScreen.Local)
+            {
+                if ((gcwLocal.Top - Interval.Value) > 0)
+                    gcwLocal.Top -= Interval.Value;
+            }
+            else
+            {
+                if ((gcwSystem.Top - Interval.Value) > 0)
+                    gcwSystem.Top -= Interval.Value;
+            }
         }
 
         private void pickOutput_Click(object sender, RoutedEventArgs e)
@@ -555,29 +707,13 @@ namespace RatEaseW
 
         }
 
-        private void SetSystemRectangle(object sender, RoutedEventArgs e)
-        {
-            
-            sLeft = Properties.Settings.Default.sLeft;
-            sTop = Properties.Settings.Default.sTop;
-            sWidth = Properties.Settings.Default.sWidth;
-            sHeight = Properties.Settings.Default.sHeight;
-           
-            
-            gcw.Top = sTop;
-            gcw.Left = sLeft;
-            gcw.Width = sWidth;
-            gcw.Height = sHeight;
-            gcwShowing = true;
-            gcw.Show();
-        }
 
-        private void FinishSystemRectanglee_Click(object sender, RoutedEventArgs e)
+        private void SaveEveSystemBMP()
         {
-            sHeight = (int)gcw.Height;
-            sWidth = (int)gcw.Width;
-            sTop = (int)gcw.Top;
-            sLeft = (int)gcw.Left;
+            sHeight = (int)gcwSystem.Height;
+            sWidth = (int)gcwSystem.Width;
+            sTop = (int)gcwSystem.Top;
+            sLeft = (int)gcwSystem.Left;
             Properties.Settings.Default.sLeft = sLeft;
             Properties.Settings.Default.sTop = sTop;
             Properties.Settings.Default.sWidth = sWidth;
@@ -587,26 +723,34 @@ namespace RatEaseW
             var dp = new System.Drawing.Point(sLeft + sWidth, sTop + sHeight);
 
             curImage = sc.Capture(sp, dp);
-            
+
             curBitmap = (Bitmap)curImage;
             Bitmap resized = new Bitmap(curBitmap, new System.Drawing.Size(curBitmap.Width * 2, curBitmap.Height * 2));
             string fname = outFolder.Text + "\\system.bmp";
             resized.Save(fname);
             resized.Dispose();
             if (gcwShowing)
-                gcw.Hide();
-            if(File.Exists(outFolder.Text + "\\system.txt"))
+            {
+                gcwLocal.Hide();
+                gcwSystem.Hide();
+            }
+            if (File.Exists(outFolder.Text + "\\system.txt"))
                 File.Delete(outFolder.Text + "\\system.txt");
+        }
+
+        private void FinishSystemRectanglee_Click(object sender, RoutedEventArgs e)
+        {
+          
         }
 
         private void SetSystemRectanglee_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            gcw.Top = 50;
-            gcw.Left = 50;
-            gcw.Width = 80;
-            gcw.Height = 8;
+            gcwLocal.Top = 50;
+            gcwLocal.Left = 50;
+            gcwLocal.Width = 80;
+            gcwLocal.Height = 8;
             gcwShowing = true;
-            gcw.Show();
+            gcwLocal.Show();
         }
 
         private string readText(string fn)
@@ -631,6 +775,22 @@ namespace RatEaseW
         {
             Clipboard.SetText(redline.Text);
         }
+
+        private void GreenControlMode_Click(object sender, RoutedEventArgs e)
+        {
+            if (greenType == GreenScreen.Local)
+            {
+                GreenControlMode.Content = "G Mode: System";
+                greenType = GreenScreen.System;
+            }
+            else
+            {
+                GreenControlMode.Content = "G Mode: Local";
+                greenType = GreenScreen.Local;
+            }
+        }
+
+      
 
         private void populateRedLine()
         {
