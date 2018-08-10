@@ -74,7 +74,11 @@ namespace RatEaseW
             setRectangle = true;
             GreenGrid.Visibility = Visibility.Visible;
             checkSystemCounter = 0;
+            
+            isOutPathValid = TestOutPath();
         }
+
+        private bool isOutPathValid;
         public GreenScreenW gcwLocal { get; set; }
         public GreenScreenW gcwSystem { get; set; }
         public int width { get; set; }
@@ -227,9 +231,10 @@ namespace RatEaseW
             }
             if (eveSystemBid != currentEveSystemBid)
             {
-                //push system bmp
-                SaveEveSystemBMP();  //If EveSystem bitmap white bits are different, we are likely in a new system.
                 eveSystemBid = currentEveSystemBid;
+                if (isOutPathValid)
+                    SaveEveSystemBMP();  //If EveSystem bitmap white bits are different, we are likely in a new system.
+                
                 return true;
             }
             return false;
@@ -291,8 +296,11 @@ namespace RatEaseW
                            
                             try
                             {
-                                File.Delete(fname);
-                                resized.Save(fname, ImageFormat.Bmp);
+                                if (isOutPathValid)
+                                {
+                                    File.Delete(fname);
+                                    resized.Save(fname, ImageFormat.Bmp);
+                                }
                             }
                             catch 
                             {
@@ -733,7 +741,8 @@ namespace RatEaseW
             curBitmap = (Bitmap)curImage;
             Bitmap resized = new Bitmap(curBitmap, new System.Drawing.Size(curBitmap.Width * 2, curBitmap.Height * 2));
             string fname = outFolder.Text + "\\system.bmp";
-            resized.Save(fname);
+            if(isOutPathValid)
+                resized.Save(fname);
             resized.Dispose();
             if (gcwShowing)
             {
@@ -823,33 +832,22 @@ namespace RatEaseW
             redline.Text += " nv";
             waitASecond = false;
         }
-        //private void pickResults_Click(object sender, RoutedEventArgs e)
-        //{
 
+        private bool TestOutPath()
+        {
+            try
+            {
+                string sysfile = outFolder.Text + "\\test.log";
+                File.WriteAllText(sysfile, "test");
+                File.Delete(sysfile);
 
-        //    var dlg = new CommonOpenFileDialog();
-        //    dlg.Title = "set Result Folder";
-        //    dlg.IsFolderPicker = true;
-        //    dlg.InitialDirectory = resultFolder.Text;
-
-        //    dlg.AddToMostRecentlyUsedList = false;
-        //    dlg.AllowNonFileSystemItems = false;
-        //    dlg.DefaultDirectory = resultFolder.Text;
-        //    dlg.EnsureFileExists = true;
-        //    dlg.EnsurePathExists = true;
-        //    dlg.EnsureReadOnly = false;
-        //    dlg.EnsureValidNames = true;
-        //    dlg.Multiselect = false;
-        //    dlg.ShowPlacesList = true;
-
-        //    if (dlg.ShowDialog() == CommonFileDialogResult.Ok)
-        //    {
-        //        resultFolder.Text = dlg.FileName;
-        //        // Do something with selected folder string
-        //    }
-        //    Properties.Settings.Default.resultFolder = resultFolder.Text;
-        //    Properties.Settings.Default.Save();
-        //    dlg.Dispose();
-        //}
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+       
     }
 }
