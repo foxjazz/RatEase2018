@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  servicefroos:
+    image: ${DOCKER_REGISTRY}servicefroos
+    build:
+      context: .
+      dockerfile: ServiceFroos\Dockerfile
