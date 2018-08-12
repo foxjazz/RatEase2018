@@ -465,8 +465,8 @@ namespace RatEaseW
             BtnStart.Content = "Started";
             if (gcwShowing)
             {
-                gcwLocal.Hide();
-                gcwSystem.Hide();   
+                gcwLocal.Close();
+                gcwSystem.Close();   
             }
             GreenGrid.Visibility = Visibility.Collapsed;
             Status.Background = Brushes.LightSeaGreen;
@@ -831,6 +831,13 @@ namespace RatEaseW
             }
             redline.Text += " nv";
             waitASecond = false;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            dtimer.Stop();
+            gcwSystem.Close();
+            gcwLocal.Close();
         }
 
         private bool TestOutPath()
