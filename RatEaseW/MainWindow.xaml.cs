@@ -528,11 +528,14 @@ namespace RatEaseW
                 height = 500;
             if (width > 10)
                 width = 4;
+            if (gcwLocal == null)
+                gcwLocal = new GreenScreenW();
             gcwLocal.Top = top;
             gcwLocal.Left = left;
             gcwLocal.Width = width;
             gcwLocal.Height = height;
             gcwShowing = true;
+           
             gcwLocal.Show();
 
             sLeft = Properties.Settings.Default.sLeft;
@@ -548,6 +551,8 @@ namespace RatEaseW
             if (sTop< 5)
                 sTop = 10;
 
+            if (gcwSystem == null)
+                gcwSystem = new GreenScreenW();
             gcwSystem.Top = sTop;
             gcwSystem.Left = sLeft;
             gcwSystem.Width = sWidth;
