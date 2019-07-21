@@ -10,6 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.IO;
+using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json.Serialization;
+using AspNetCore.Identity.LiteDB;
+using AspNetCore.Identity.LiteDB.Data;
+using AspNetCore.Identity.LiteDB.Models;
+
 namespace ServiceFroos
 {
     public class Startup
@@ -30,9 +36,35 @@ namespace ServiceFroos
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddSingleton<LiteDbContext>();
+            services.AddIdentity<ApplicationUser, AspNetCore.Identity.LiteDB.IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequiredLength = 6;
+                })
+                .AddUserStore<LiteDbUserStore<ApplicationUser>>()
+                .AddRoleStore<LiteDbRoleStore<AspNetCore.Identity.LiteDB.IdentityRole>>()
+                .AddDefaultTokenProviders();
 
+        
+        //services.AddSignalR()
+        //    .AddMessagePackProtocol(options =>
+        //    {
+        //        options.FormatterResolvers = new List<MessagePack.IFormatterResolver>()
+        //        {
+        //            MessagePack.Resolvers.StandardResolver.Instance
+        //        };
+        //    });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+        //services.AddSignalR()
+        //    .AddJsonHubProtocol(options => {
+        //        options.PayloadSerializerSettings.ContractResolver =
+        //            new DefaultContractResolver();
+        //    });
+        services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSignalR();
 
         }
@@ -57,6 +89,7 @@ namespace ServiceFroos
             Directory.CreateDirectory(inpath);
             app.UseHttpsRedirection();
             app.UseDefaultFiles();
+            app.UseAuthentication();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSignalR(route =>

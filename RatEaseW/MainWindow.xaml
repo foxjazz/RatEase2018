@@ -12,7 +12,7 @@
 
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
-            <RowDefinition Height="225"></RowDefinition>
+            <RowDefinition Height="235"></RowDefinition>
             <RowDefinition Height="200"></RowDefinition>
             <RowDefinition Height="750"></RowDefinition>
         </Grid.RowDefinitions>
@@ -55,7 +55,8 @@
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
-              
+                <RowDefinition Height="25"></RowDefinition>
+
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
@@ -67,28 +68,33 @@
                 <ColumnDefinition></ColumnDefinition>
 
             </Grid.ColumnDefinitions>
-         
-            
+
+
             <Button Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Alert Sound" x:Name="SetAlertSound" FontFamily="Georgia" Click="SetAlertSound_Click"/>
             <Button Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Clear Sound" x:Name="SetClearSound" FontFamily="Georgia" Click="SetClearSound_Click"/>
             <Label x:Name="Status" Grid.Row ="1" Grid.ColumnSpan="1" Background="#FFFB7070">Stopped</Label>
             <Label x:Name="lbl1" Grid.Row ="1" Grid.Column="1">Red Count:</Label>
-            
+
             <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="2"></TextBox>
-            
+
 
 
             <Label x:Name="EveSystem" Grid.Column="1" Content="System:" />
             <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set Green Screens" HorizontalAlignment="Right" Width="150" Click="SetRectangle" Grid.ColumnSpan="3" Height="25" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
             <!--<Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle" MouseRightButtonUp="SetSystemRectanglee_MouseRightButtonUp" Height="25" VerticalAlignment="Bottom"/>-->
-            
+
             <!--<ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />-->
-            <TextBox x:Name="coord" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3"></TextBox>
+            <TextBox x:Name="coord" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Width="119" FontFamily="Ebrima" HorizontalAlignment="Right" Margin="0,0,9,0"></TextBox>
 
             <Button x:Name="pickOutput" Grid.Row="3" Grid.Column="0" Height="25" VerticalAlignment="Top" Click="pickOutput_Click">Set Output</Button>
             <TextBox x:Name="outFolder" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"></TextBox>
             <TextBox x:Name="redline" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6"></TextBox>
             <Button x:Name="copy" Grid.Row="4" Grid.Column="0" Click="copy_Click">Cpy</Button>
+            <Label Grid.ColumnSpan="3" Grid.Row="5"  Content="Width to copy - discord" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="copyDiscDesc" AutomationProperties.HelpText="This is inteneded to copy data from overview to discord" Grid.Column="3" Margin="54,0,0,0" Width="131"/>
+
+            <TextBox Grid.Column="5" Grid.Row="5" x:Name="copyWidth" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="52" TextInput="CopyWidth_TextInput" Margin="61,0,0,0" Grid.ColumnSpan="2" />
+            <Label Grid.ColumnSpan="2" Grid.Row="5"  Content="Discord Hook" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="lblWH" />
+            <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="154" TextInput="CopyWidth_TextInput" Margin="23,0,0,0" Grid.ColumnSpan="3" />
         </Grid>
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Grid.Row="2" Height="510" BorderBrush="Azure" >
             <Image x:Name="VImage" Stretch="None" Source="{Binding CurrentData.VImg}"/>
@@ -97,6 +103,7 @@
         <StackPanel x:Name="images" Grid.Row="2" Grid.Column="0" >
 
         </StackPanel>
+
     </Grid>
 
 

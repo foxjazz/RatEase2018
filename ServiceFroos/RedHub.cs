@@ -20,7 +20,14 @@ namespace ServiceFroos
             {
                 file.WriteLine(user);
             }
-            message.bitmap.Save(Startup.path + "\\" + myUniqueFileName + ".bmp");
+            message.eveSystem.Save(Startup.path + "\\" + myUniqueFileName + ".bmp");
+            int i = 0;
+            foreach (Bitmap bp in message.redPlayers)
+            {
+                i++;
+                string fn = Startup.path + "\\" + myUniqueFileName + i + ".bmp";
+                bp.Save(fn);
+            }
 
             //write two files user and bmp for further processing.
 
@@ -54,8 +61,8 @@ namespace ServiceFroos
 
     public class BitMapMessage
     {
-        public Bitmap bitmap { get; set; }
-        public string eveSystem { get; set; }
+        public Bitmap eveSystem { get; set; }
+        public Bitmap[] redPlayers { get; set; }
         
 
     }

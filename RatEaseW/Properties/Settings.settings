@@ -5,26 +5,11 @@
     <Setting Name="CurrentData" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="RedisConn" Type="System.String" Scope="User">
-      <Value Profile="(Default)">fadesma.redis.cache.windows.net,abortConnect=false,ssl=true,password=RH1ZmgqQ+MSmb+y88GHQ+NKmNc0sd6FUXjAxgIF8U3E=</Value>
-    </Setting>
     <Setting Name="AlertSoundFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="AllClearSoundFile" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="left" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
-    </Setting>
-    <Setting Name="top" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">100</Value>
-    </Setting>
-    <Setting Name="height" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
-    </Setting>
-    <Setting Name="width" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8</Value>
     </Setting>
     <Setting Name="outFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -43,6 +28,24 @@
     </Setting>
     <Setting Name="sWidth" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="discord" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="left" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">274</Value>
+    </Setting>
+    <Setting Name="top" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">300</Value>
+    </Setting>
+    <Setting Name="height" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1850</Value>
+    </Setting>
+    <Setting Name="width" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="cpyWidth" Type="System.String" Scope="User">
+      <Value Profile="(Default)">300</Value>
     </Setting>
   </Settings>
 </SettingsFile>

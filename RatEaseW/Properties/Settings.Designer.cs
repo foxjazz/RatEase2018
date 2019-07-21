@@ -12,7 +12,7 @@ namespace RatEaseW.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -37,19 +37,6 @@ namespace RatEaseW.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("fadesma.redis.cache.windows.net,abortConnect=false,ssl=true,password=RH1ZmgqQ+MSm" +
-            "b+y88GHQ+NKmNc0sd6FUXjAxgIF8U3E=")]
-        public string RedisConn {
-            get {
-                return ((string)(this["RedisConn"]));
-            }
-            set {
-                this["RedisConn"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string AlertSoundFile {
             get {
@@ -69,54 +56,6 @@ namespace RatEaseW.Properties {
             }
             set {
                 this["AllClearSoundFile"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int left {
-            get {
-                return ((int)(this["left"]));
-            }
-            set {
-                this["left"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("100")]
-        public int top {
-            get {
-                return ((int)(this["top"]));
-            }
-            set {
-                this["top"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
-        public int height {
-            get {
-                return ((int)(this["height"]));
-            }
-            set {
-                this["height"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("8")]
-        public int width {
-            get {
-                return ((int)(this["width"]));
-            }
-            set {
-                this["width"] = value;
             }
         }
         
@@ -189,6 +128,78 @@ namespace RatEaseW.Properties {
             }
             set {
                 this["sWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string discord {
+            get {
+                return ((string)(this["discord"]));
+            }
+            set {
+                this["discord"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("274")]
+        public int left {
+            get {
+                return ((int)(this["left"]));
+            }
+            set {
+                this["left"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public int top {
+            get {
+                return ((int)(this["top"]));
+            }
+            set {
+                this["top"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1850")]
+        public int height {
+            get {
+                return ((int)(this["height"]));
+            }
+            set {
+                this["height"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int width {
+            get {
+                return ((int)(this["width"]));
+            }
+            set {
+                this["width"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("300")]
+        public string cpyWidth {
+            get {
+                return ((string)(this["cpyWidth"]));
+            }
+            set {
+                this["cpyWidth"] = value;
             }
         }
     }

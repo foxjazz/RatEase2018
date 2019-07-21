@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Threading;
 
@@ -34,7 +35,55 @@ namespace RatEaseW
     /// 
     public partial class MainWindow : Window
     {
-        
+        //[DllImport("user32.dll")]
+        //internal static extern uint SendInput(uint nInputs,
+        //    [MarshalAs(UnmanagedType.LPArray), In] INPUT[] pInputs,
+        //    int cbSize);
+        //private static KEYBDINPUT createKeybdInput(ushort wVK, uint flag)
+        //{
+        //    KEYBDINPUT i = new KEYBDINPUT();
+
+        //    i.wVk = wVK;
+        //    i.wScan = 0;
+        //    i.time = 0;
+        //    i.dwExtraInfo = IntPtr.Zero;
+        //    i.dwFlags = flag;
+        //    return i;
+        //}
+
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct KEYBDINPUT
+        //{
+        //    public ushort wVk;
+        //    public ushort wScan;
+        //    public uint dwFlags;
+        //    public uint time;
+        //    public IntPtr dwExtraInfo;
+        //}
+
+
+
+        //public static void sim_type()
+        //{
+
+        //    INPUT[] inp = new INPUT[2];
+
+
+        //    inp[0].type = 1;
+        //    inp[0].ki = createKeybdInput(0x41, 0x0001);
+        //    inp[1].type = 1;
+        //    inp[1].ki = createKeybdInput(0x41, 0x0002);
+
+
+
+        //    if (SendInput(2, inp, Marshal.SizeOf(typeof(INPUT))) == 0)
+        //    {
+        //        Console.WriteLine("error");
+        //    }
+
+
+
+        //}
         public MainWindow()
         {
             InitializeComponent();
@@ -56,6 +105,7 @@ namespace RatEaseW
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
             outFolder.Text =Properties.Settings.Default.outFolder;
+            discordHook.Text = Properties.Settings.Default.discord;
             //resultFolder.Text = Properties.Settings.Default.resultFolder;
 
             //System region Setting
@@ -76,8 +126,10 @@ namespace RatEaseW
             checkSystemCounter = 0;
             
             isOutPathValid = TestOutPath();
+            keyDownTimer = DateTime.Now;
+            copyWidth.Text = Properties.Settings.Default.cpyWidth;
         }
-
+        
         private bool isOutPathValid;
         public GreenScreenW gcwLocal { get; set; }
         public GreenScreenW gcwSystem { get; set; }
@@ -89,6 +141,9 @@ namespace RatEaseW
 
         private enum GreenScreen {Local, System};
 
+        private DateTime keyDownTimer;
+
+        
         private GreenScreen greenType;
         private int sWidth;
         private int sHeight;
@@ -113,6 +168,7 @@ namespace RatEaseW
         private int redsPrev;
         private DateTime RedCheckStart;
         private bool populateResult;
+        private int cpyWidth = 300;
 
         private int waitIterations;
         
@@ -127,6 +183,10 @@ namespace RatEaseW
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
+            if (keyDownTimer.AddMinutes(10) < DateTime.Now)
+            {
+               
+            }
             if (checkSystemCounter > 6)
             {
                 isSystemDifferent = CheckEveSystem();
@@ -287,11 +347,11 @@ namespace RatEaseW
                                 width = 1;
                             }
                             // The - one on the y axis if to allow font kerning to get the whole name;
-                            var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x + 5, (top + y) - 2), new System.Drawing.Point(capW + left + x,capY + top + y));
+                            // var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x + 5, (top + y) - 2), new System.Drawing.Point(capW + left + x,capY + top + y));
                             //var bitmap = pushBitmap(left, top, ref curBitmap);
-                            var img2 = GetImage(capImage);
+                            // var img2 = GetImage(capImage);
                             //images.Children.Add(img2);
-                            Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
+                            // Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
                             string fname = outFolder.Text + "\\t" + RedCount + ".bmp";
                            
                             try
@@ -299,13 +359,13 @@ namespace RatEaseW
                                 if (isOutPathValid)
                                 {
                                     File.Delete(fname);
-                                    resized.Save(fname, ImageFormat.Bmp);
+                                    //resized.Save(fname, ImageFormat.Bmp);
                                 }
                             }
                             catch 
                             {
                             }
-                            scaleImage(capImage);
+                            //scaleImage(capImage);
                             y += redHeight;
                         }
                         //lblDetectedRed.Text = "lblDetected Red";
@@ -438,6 +498,17 @@ namespace RatEaseW
             {
                 MessageBox.Show(ex.Message + " could not find sound file:" + Properties.Settings.Default.AlertSoundFile);
             }
+            // Send to discord
+            try
+            {
+                var capImage = (Bitmap)sc.Capture(new System.Drawing.Point(left , (top) ), new System.Drawing.Point(left + cpyWidth, top + height));
+                var img2 = GetImage(capImage);
+
+            }
+            catch
+            {
+
+            }
 
         }
 
@@ -458,6 +529,14 @@ namespace RatEaseW
                 Properties.Settings.Default.top = top;
                 Properties.Settings.Default.width = width;
                 Properties.Settings.Default.height = height;
+                Properties.Settings.Default.discord = discordHook.Text;
+                int testWidth;  
+                if (Int32.TryParse(copyWidth.Text, out testWidth))
+                {
+                    //Only save valid option to settings
+                    cpyWidth = testWidth;
+                    Properties.Settings.Default.cpyWidth = cpyWidth.ToString();
+                }
                 Properties.Settings.Default.Save();
        
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
@@ -528,8 +607,8 @@ namespace RatEaseW
                 height = 500;
             if (width > 10)
                 width = 4;
-            if (gcwLocal == null)
-                gcwLocal = new GreenScreenW();
+            
+            gcwLocal = new GreenScreenW();
             gcwLocal.Top = top;
             gcwLocal.Left = left;
             gcwLocal.Width = width;
@@ -551,8 +630,8 @@ namespace RatEaseW
             if (sTop< 5)
                 sTop = 10;
 
-            if (gcwSystem == null)
-                gcwSystem = new GreenScreenW();
+            
+            gcwSystem = new GreenScreenW();
             gcwSystem.Top = sTop;
             gcwSystem.Left = sLeft;
             gcwSystem.Width = sWidth;
@@ -843,8 +922,25 @@ namespace RatEaseW
             dtimer.Stop();
             gcwSystem.Close();
             gcwLocal.Close();
+            gcwLocal = null;
+            gcwSystem = null;
         }
 
+      
+
+        private void CopyWidth_TextInput(object sender, TextCompositionEventArgs e)
+        {
+            Console.WriteLine(e.Text);
+            int i;
+            if (!Int32.TryParse((string)e.Source, out i))
+            {
+                copyWidth.Text = "300";
+            }
+
+                
+        }
+
+      
         private bool TestOutPath()
         {
             try
