@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+    <configSections>
+        <sectionGroup name="userSettings" type="System.Configuration.UserSettingsGroup, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+            <section name="RatEaseW.Properties.Settings" type="System.Configuration.ClientSettingsSection, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" allowExeDefinition="MachineToLocalUser" requirePermission="false" />
+        </sectionGroup>
+    </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.6.1" />
+    </startup>
+    <userSettings>
+        <RatEaseW.Properties.Settings>
+            <setting name="CurrentData" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="AlertSoundFile" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="AllClearSoundFile" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="outFolder" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="resultFolder" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="sLeft" serializeAs="String">
+                <value>10</value>
+            </setting>
+            <setting name="sHeight" serializeAs="String">
+                <value>10</value>
+            </setting>
+            <setting name="sTop" serializeAs="String">
+                <value>10</value>
+            </setting>
+            <setting name="sWidth" serializeAs="String">
+                <value>100</value>
+            </setting>
+            <setting name="discord" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="left" serializeAs="String">
+                <value>274</value>
+            </setting>
+            <setting name="top" serializeAs="String">
+                <value>300</value>
+            </setting>
+            <setting name="height" serializeAs="String">
+                <value>1850</value>
+            </setting>
+            <setting name="width" serializeAs="String">
+                <value>2</value>
+            </setting>
+            <setting name="cpyWidth" serializeAs="String">
+                <value>300</value>
+            </setting>
+            <setting name="sftphost" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="sftpun" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="sftppw" serializeAs="String">
+                <value />
+            </setting>
+            <setting name="discordUrl" serializeAs="String">
+                <value />
+            </setting>
+        </RatEaseW.Properties.Settings>
+    </userSettings>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="System.Net.Http" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.1.1.0" newVersion="4.1.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Diagnostics.DiagnosticSource" publicKeyToken="cc7b13ffcd2ddd51" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.1.0" newVersion="4.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.IO.FileSystem" publicKeyToken="b03f5f7f11d50a3a" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-4.0.2.0" newVersion="4.0.2.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+</configuration>
