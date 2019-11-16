@@ -92,12 +92,12 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Green Local Controls</Label>
             <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="3" Content="+ width" Click="addWidth_Click" />
-            <Button x:Name="subHeigth"  Grid.Row="1" Grid.Column="4" Content="- heigth" Click="subHeigth_Click" Margin="0,0.667,0,25" Grid.RowSpan="2" />
-            <Button x:Name="Extend" Grid.Column="1" Content="extend" Click="extend" Grid.ColumnSpan="2" Margin="64.333,25,0,25" Grid.RowSpan="3"/>
+            <Button x:Name="subHeigth"  Grid.Row="1" Grid.Column="1" Content="- heigth" Click="subHeigth_Click" Margin="64.333,0.667,1,25" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <Button x:Name="Extend" Grid.Column="1" Content="extend" Click="extend" Grid.ColumnSpan="2" Margin="0.333,25,64,25" Grid.RowSpan="3"/>
             <Button x:Name="GreenControlMode" Grid.Row ="0" Grid.Column="3" Grid.ColumnSpan="2" Click="GreenControlMode_Click" Height="26" VerticalAlignment="Bottom">G Mode: Local</Button>
-            <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="4" IsEnabled="False"/>
-            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3" Margin="0,0.333,0,0"></Slider>
-            <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Content="Start" Height="50" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FFEC6D6D" FontSize="14" FontWeight="Bold" Margin="64.333,0,0,0.333" Grid.RowSpan="2" />
+            <TextBox x:Name="txtInterval" Grid.Column="5" IsEnabled="False" Margin="0,25" Grid.RowSpan="3"/>
+            <Slider x:Name="Interval" Grid.Column="5" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3" Margin="0,25,0,0.667" Grid.RowSpan="2"/>
+            <Button Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="4" Content="Start" Height="50" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FFEC6D6D" FontSize="14" FontWeight="Bold" Margin="63,0,0,0.333" Grid.RowSpan="2" />
             <Button x:Name="testdiscord" Grid.ColumnSpan="2" Content="Test send " HorizontalAlignment="Left" Height="23" Margin="2,2,0,0" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="Testdiscord_Click"/>
             <Label x:Name="sftphostlbl" Content="sftphost" Height="25" Margin="64,43,0.333,-42" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
             <Label Content="sftp user" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="0.333,71,0,-69" Grid.Row="3" VerticalAlignment="Top" Width="64"/>
@@ -107,6 +107,7 @@
             <PasswordBox x:Name="sftppw" Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="3.667,98,0,-96" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="152"/>
             <TextBox x:Name="sftpun" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Right" Height="23" Margin="0,75,10,-72" Grid.Row="3" TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Width="178"/>
             <TextBox x:Name="sftphost" Grid.ColumnSpan="4" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="4.667,47,0,-44" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="252"/>
+            <Button x:Name="Reset_Width" Content="Width 4" Grid.Column="4" HorizontalAlignment="Left" Margin="0,2.667,0,0" Grid.Row="1" VerticalAlignment="Top" Width="54" Click="Reset_Width_Click"/>
         </Grid>
         <!--<Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="190" Grid.Row="2" Height="434" BorderBrush="Azure" Margin="0,75.667,0,0" >
             
@@ -117,10 +118,10 @@
 
                 <RowDefinition Height="750"></RowDefinition>
             </Grid.RowDefinitions>
-            <Image x:Name="VImage" Stretch="None"  Margin="0,0,369,185" OpacityMask="#FFAE3E3E" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp"/>
+            <Image x:Name="VImage"  Margin="1,1,369,185" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp" MouseLeave="VImage_MouseLeave" Stretch="None"/>
 
         </Grid>
-        <Image x:Name="StickImage" HorizontalAlignment="Left" Height="201" Margin="515,10,0,0" VerticalAlignment="Top" Width="100" />
+        <Image x:Name="StickImage" HorizontalAlignment="Left" Height="201" Margin="515,10,0,0" VerticalAlignment="Top" Width="100" Stretch="None" />
 
     </Grid>
 

@@ -533,9 +533,9 @@ namespace RatEaseW
         {
             ds = new DiscordSend(discordHook.Text);
             populateResult = true;
-            if (gcwLocal.Width > 4)
+            if (width > 3)
             {
-                gcwLocal.Width = 4;
+                width = 3;
             }
                 
                 //height = (int) gcwLocal.Height;
@@ -930,6 +930,17 @@ namespace RatEaseW
         }
 
         private void VImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            inMove = false;
+        }
+
+        private void Reset_Width_Click(object sender, RoutedEventArgs e)
+        {
+            width = 4;
+            setAbs();
+        }
+
+        private void VImage_MouseLeave(object sender, MouseEventArgs e)
         {
             inMove = false;
         }
