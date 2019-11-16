@@ -90,7 +90,7 @@
 
 
             <Label x:Name="EveSystem" Grid.Column="1" Content="System:" />
-            <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set Green Screens" HorizontalAlignment="Right" Width="150" Click="SetRectangle" Grid.ColumnSpan="3" Height="25" VerticalAlignment="Bottom" Margin="0,0,0,1"/>
+            <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set red sliver" HorizontalAlignment="Right" Width="150" Grid.ColumnSpan="3" Height="25" VerticalAlignment="Bottom" Margin="0,0,0,1" Click="SetRectangle"/>
             <!--<Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle" MouseRightButtonUp="SetSystemRectanglee_MouseRightButtonUp" Height="25" VerticalAlignment="Bottom"/>-->
 
             <!--<ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />-->
@@ -107,11 +107,11 @@
             <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="132" TextInput="CopyWidth_TextInput" Margin="22.333,0.333,0,0" Grid.ColumnSpan="3" />
             <TextBox x:Name="esystem" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" TextWrapping="Wrap" Text="testing" VerticalAlignment="Top" Width="120"/>
         </Grid>
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Grid.Row="2" Height="510" BorderBrush="Azure" >
+        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="190" Grid.Row="2" Height="510" BorderBrush="Azure" >
             <Image x:Name="VImage" Stretch="None" Source="{Binding CurrentData.VImg}"/>
         </Border>
 
-        <StackPanel x:Name="images" Grid.Row="2" Grid.Column="0" />
+
 
     </Grid>
 

@@ -56,6 +56,22 @@ namespace RatEaseW
             top = Properties.Settings.Default.top;
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
+            if (left < 0) {left = 120;}
+            if (top < 0) { top = 420; }
+
+            if (width < 0)
+            {
+                width = 5;
+            }
+
+            if (height < 0)
+            {
+                height = 100;
+
+            }
+
+            
+
             outFolder.Text =Properties.Settings.Default.outFolder;
             discordHook.Text = Properties.Settings.Default.discord;
             //resultFolder.Text = Properties.Settings.Default.resultFolder;
@@ -83,9 +99,9 @@ namespace RatEaseW
 
             populateNotificationData();
 
-
-
         }
+
+        
         private void populateNotificationData()
         {
             var d = Directory.GetCurrentDirectory();
@@ -126,7 +142,9 @@ namespace RatEaseW
                 sftpun.Text = Properties.Settings.Default.sftpun;
                 urlpic.Text = Properties.Settings.Default.discordUrl;
             }
+            setAbs();
         }
+
 
         DiscordSend ds;
         private bool isOutPathValid;
@@ -542,10 +560,10 @@ namespace RatEaseW
                 gcwLocal.Width = 4;
             }
                 
-                height = (int) gcwLocal.Height;
-                width = (int) gcwLocal.Width;
-                top = (int) gcwLocal.Top;
-                left = (int) gcwLocal.Left;
+                //height = (int) gcwLocal.Height;
+                //width = (int) gcwLocal.Width;
+                //top = (int) gcwLocal.Top;
+                //left = (int) gcwLocal.Left;
                 Properties.Settings.Default.left = left;
                 Properties.Settings.Default.top = top;
                 Properties.Settings.Default.width = width;
@@ -579,6 +597,7 @@ namespace RatEaseW
             Status.Content = "Started";
             eveSystemBid = 0;
             dtimer.Start();
+            setAbs();
 
         }
 
@@ -617,6 +636,7 @@ namespace RatEaseW
 
         private void SetRectangle(object sender, RoutedEventArgs e)
         {
+
             dtimer.Stop();
             BtnStart.Content = "Start";
             isSettingRect = true;
@@ -634,38 +654,38 @@ namespace RatEaseW
                 height = 150;
             if (width > 10)
                 width = 4;
-            
-            gcwLocal = new GreenScreenW();
-            gcwLocal.Top = top;
-            gcwLocal.Left = left;
-            gcwLocal.Width = width;
-            gcwLocal.Height = height;
-            gcwShowing = true;
-           
-            gcwLocal.Show();
 
-            sLeft = Properties.Settings.Default.sLeft;
-            sTop = Properties.Settings.Default.sTop;
-            sWidth = Properties.Settings.Default.sWidth;
-            sHeight = Properties.Settings.Default.sHeight;
-            if (sLeft < 0)
-                sLeft = 40;
-            if (sHeight < 5 || sHeight > 100)
-                sHeight = 20;
-            if (sWidth < 20)
-                sWidth = 60;
-            if (sTop< 5)
-                sTop = 10;
+            //gcwLocal = new GreenScreenW();
+            //gcwLocal.Top = top;
+            //gcwLocal.Left = left;
+            //gcwLocal.Width = width;
+            //gcwLocal.Height = height;
+            //gcwShowing = true;
 
-            
-            gcwSystem = new GreenScreenW();
-            gcwSystem.Top = sTop;
-            gcwSystem.Left = sLeft;
-            gcwSystem.Width = sWidth;
-            gcwSystem.Height = sHeight;
-            
-            gcwSystem.Show();
-            greenType = GreenScreen.Local;
+            // gcwLocal.Show();
+
+            //sLeft = Properties.Settings.Default.sLeft;
+            //sTop = Properties.Settings.Default.sTop;
+            //sWidth = Properties.Settings.Default.sWidth;
+            //sHeight = Properties.Settings.Default.sHeight;
+            //if (sLeft < 0)
+            //    sLeft = 40;
+            //if (sHeight < 5 || sHeight > 100)
+            //    sHeight = 20;
+            //if (sWidth < 20)
+            //    sWidth = 60;
+            //if (sTop < 5)
+            //    sTop = 10;
+
+
+            //gcwSystem = new GreenScreenW();
+            //gcwSystem.Top = sTop;
+            //gcwSystem.Left = sLeft;
+            //gcwSystem.Width = sWidth;
+            //gcwSystem.Height = sHeight;
+
+            //gcwSystem.Show();
+            //greenType = GreenScreen.Local;
             GreenControlMode.Content = "G Mode: Local";
             GreenGrid.Visibility = Visibility.Visible;
             Status.Background = Brushes.LightCoral;
@@ -673,9 +693,9 @@ namespace RatEaseW
 
         }
 
-       
 
-       
+
+
 
         private void thinner(object sender, RoutedEventArgs e)
         {
@@ -683,10 +703,10 @@ namespace RatEaseW
 
             if (greenType == GreenScreen.Local)
             {
-                if (gcwLocal.Width > 1)
-                    test = (int) gcwLocal.Width - (int) Interval.Value;
+                if (width > 1)
+                    test = (int) width - (int) Interval.Value;
                 if (test > 0)
-                    gcwLocal.Width = test;
+                    width = test;
             }
             else
             {
@@ -702,7 +722,7 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                gcwLocal.Width += (int) Interval.Value;
+                width += (int) Interval.Value;
             }
             else
             {
@@ -714,7 +734,7 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                gcwLocal.Height -= (int)Interval.Value;
+                height -= (int)Interval.Value;
             }
             else
             {
@@ -726,7 +746,7 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                gcwLocal.Left += Interval.Value;
+                left += (int)Interval.Value;
             }
             else
             {
@@ -738,10 +758,11 @@ namespace RatEaseW
 
         private void setAbs()
         {
-            left = (int)gcwLocal.Left;
-            width = (int) gcwLocal.Width;
-            top = (int) gcwLocal.Top;
-            height = (int) gcwLocal.Height;
+            //left = (int)gcwLocal.Left;
+            //width = (int) gcwLocal.Width;
+            //top = (int) gcwLocal.Top;
+            //height = (int) gcwLocal.Height;
+            WindowScreenshotWithoutClass();
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
         }
       
@@ -750,7 +771,7 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                gcwLocal.Height += Interval.Value;
+                height += (int)Interval.Value;
             }
             else
             {
@@ -770,9 +791,8 @@ namespace RatEaseW
             
             if (greenType == GreenScreen.Local)
             {
-                double test = gcwLocal.Left -= Interval.Value;
-                if (test > 0)
-                    gcwLocal.Left -= Interval.Value;
+                left -= (int)Interval.Value;
+                
             }
             else
             {
@@ -788,7 +808,7 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                gcwLocal.Top += Interval.Value;
+                top += (int) Interval.Value;
             }
             else
             {
@@ -810,14 +830,15 @@ namespace RatEaseW
         {
             if (greenType == GreenScreen.Local)
             {
-                if ((gcwLocal.Top - Interval.Value) > 0)
-                    gcwLocal.Top -= Interval.Value;
+                if ((top - Interval.Value) > 0)
+                    top -= (int)Interval.Value;
             }
             else
             {
                 if ((gcwSystem.Top - Interval.Value) > 0)
                     gcwSystem.Top -= Interval.Value;
             }
+            setAbs();
         }
 
         private void pickOutput_Click(object sender, RoutedEventArgs e)
@@ -1038,20 +1059,43 @@ namespace RatEaseW
                     bitmap.Save(filename, ImageFormat.Bmp);
             }
         }
+        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool DeleteObject([In] IntPtr hObject);
+
+        public ImageSource ImageSourceFromBitmap(Bitmap bmp)
+        {
+            var handle = bmp.GetHbitmap();
+            try
+            {
+                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+            }
+            finally { DeleteObject(handle); }
+        }
+        private void WindowScreenshotWithoutClass()
+        {
+
+            System.Drawing.Rectangle bounds = new System.Drawing.Rectangle(this.left, this.top, this.width, this.height);
+            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
+            {
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+
+                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
+                }
+
+                VImage.Source = ImageSourceFromBitmap(bitmap);
+
+            }
+        }
         private void testBmp(object sender, RoutedEventArgs e)
         {
             WindowScreenshotWithoutClass(@".\capture.bmp");
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
-            //var sp = new System.Drawing.Point(left, top);
-            //var dp = new System.Drawing.Point(left + width, top + height);
-
-            //curImage = sc.Capture(sp, dp);
-
-            //curBitmap = (Bitmap)curImage;
-            //if(File.Exists(@".\currBmp.bmp"))
-            //    File.Delete(@".\currBmp.bmp");
-            //curBitmap.Save(@".\currBmp.bmp", ImageFormat.Bmp);
+            
         }
+
+     
 
         private bool TestOutPath()
         {
