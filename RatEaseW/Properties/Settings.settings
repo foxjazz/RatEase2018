@@ -47,5 +47,17 @@
     <Setting Name="cpyWidth" Type="System.String" Scope="User">
       <Value Profile="(Default)">300</Value>
     </Setting>
+    <Setting Name="sftphost" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="sftpun" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="sftppw" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="discordUrl" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -16,7 +16,7 @@
             <RowDefinition Height="200"></RowDefinition>
             <RowDefinition Height="750"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1">
+        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="283" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
@@ -44,8 +44,18 @@
             <Button x:Name="Extend" Grid.Row="2" Grid.Column="2" Content="extend" Click="extend"/>
             <Button x:Name="GreenControlMode" Grid.Row ="0" Grid.Column="3" Grid.ColumnSpan="2" Click="GreenControlMode_Click" Height="26" VerticalAlignment="Bottom">G Mode: Local</Button>
             <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="4" IsEnabled="False"/>
-            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="50" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3"></Slider>
+            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3"></Slider>
             <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Content="Start" Height="27" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FFEC6D6D" FontSize="14" FontWeight="Bold" />
+            <Button x:Name="testdiscord" Grid.ColumnSpan="2" Content="Test send " HorizontalAlignment="Left" Height="23" Margin="2,10,0,-7" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="Testdiscord_Click"/>
+            <Label x:Name="sftphostlbl" Content="sftphost" Grid.Column="1" Height="25" Margin="27,57.2,37,-56.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <Label Content="sftp user" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="27,88.2,0,-86.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
+            <Label Content="sftp pass" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="27,117.2,0,-115.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
+            <Label x:Name="url_pic" Content="urlpic" HorizontalAlignment="Left" Height="23" Margin="17,146.2,0,-143.6" Grid.Row="3" VerticalAlignment="Top" Width="54" Grid.Column="1" Grid.ColumnSpan="2"/>
+            <TextBox x:Name="urlpic" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,146.2,0,-143.6" Grid.Row="3" TextWrapping="NoWrap" VerticalAlignment="Top" Width="142"/>
+            <PasswordBox x:Name="sftppw" Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="41,117.2,0,-115.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="152"/>
+            <TextBox x:Name="sftpun" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,89.2,0,-86.6" Grid.Row="3" TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
+            <TextBox x:Name="sftphost" Grid.ColumnSpan="5" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,61.2,0,-58.6" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="241"/>
+            <Button Grid.ColumnSpan="2" Content="bmp" HorizontalAlignment="Left" Height="24" Margin="2,40,0,-38" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="testBmp"/>
         </Grid>
         <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="0">
             <Grid.RowDefinitions>
@@ -75,7 +85,7 @@
             <Label x:Name="Status" Grid.Row ="1" Grid.ColumnSpan="1" Background="#FFFB7070">Stopped</Label>
             <Label x:Name="lbl1" Grid.Row ="1" Grid.Column="1">Red Count:</Label>
 
-            <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="2"></TextBox>
+            <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="2" TextChanged="RedCount_TextChanged"></TextBox>
 
 
 
@@ -94,15 +104,14 @@
 
             <TextBox Grid.Column="5" Grid.Row="5" x:Name="copyWidth" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="52" TextInput="CopyWidth_TextInput" Margin="61,0,0,0" Grid.ColumnSpan="2" />
             <Label Grid.ColumnSpan="2" Grid.Row="5"  Content="Discord Hook" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="lblWH" />
-            <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="154" TextInput="CopyWidth_TextInput" Margin="23,0,0,0" Grid.ColumnSpan="3" />
+            <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="132" TextInput="CopyWidth_TextInput" Margin="22.333,0.333,0,0" Grid.ColumnSpan="3" />
+            <TextBox x:Name="esystem" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" TextWrapping="Wrap" Text="testing" VerticalAlignment="Top" Width="120"/>
         </Grid>
         <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="26" Grid.Row="2" Height="510" BorderBrush="Azure" >
             <Image x:Name="VImage" Stretch="None" Source="{Binding CurrentData.VImg}"/>
         </Border>
 
-        <StackPanel x:Name="images" Grid.Row="2" Grid.Column="0" >
-
-        </StackPanel>
+        <StackPanel x:Name="images" Grid.Row="2" Grid.Column="0" />
 
     </Grid>
 

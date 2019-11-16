@@ -202,5 +202,53 @@ namespace RatEaseW.Properties {
                 this["cpyWidth"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sftphost {
+            get {
+                return ((string)(this["sftphost"]));
+            }
+            set {
+                this["sftphost"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sftpun {
+            get {
+                return ((string)(this["sftpun"]));
+            }
+            set {
+                this["sftpun"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string sftppw {
+            get {
+                return ((string)(this["sftppw"]));
+            }
+            set {
+                this["sftppw"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string discordUrl {
+            get {
+                return ((string)(this["discordUrl"]));
+            }
+            set {
+                this["discordUrl"] = value;
+            }
+        }
     }
 }
