@@ -5,58 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RatEaseW"
         mc:Ignorable="d"
-        Title="MainWindow" Height="942.28" Width="525" Closed="Window_Closed">
+        Title="MainWindow" Height="942.28" Width="625" Closed="Window_Closed">
     <!--<UserControl.Resources>
         <Image x:Key="LeftArrow" Source.../>
     </UserControl.Resources>-->
 
-    <Grid Margin="0,0,0,0">
+    <Grid Margin="0,0,3.667,0.333">
         <Grid.RowDefinitions>
             <RowDefinition Height="235"></RowDefinition>
             <RowDefinition Height="200"></RowDefinition>
             <RowDefinition Height="750"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="283" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1" Grid.RowSpan="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="25"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
-                <RowDefinition Height="25"></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Green Local Controls</Label>
-            <Button Grid.Row="1" x:Name="LeftArrow" Content="&lt;&lt;" Click="LeftArrow_Click"/>
-            <Button Grid.Row="1" Grid.Column="1" Content=">>" Click="MoveRight"/>
-            <Button Grid.Row="2" Grid.Column="0" Content="Down" Click="MoveDown"/>
 
-            <Button x:Name="Up" Grid.Row="2" Grid.Column="1" Click="Up_Click">Up</Button>
-            <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="3" Content="+ width" Click="addWidth_Click" />
-            <Button x:Name="subHeigth"  Grid.Row="2" Grid.Column="3" Content="- heigth" Click="subHeigth_Click" />
-            <Button Grid.Row="1" Grid.Column="2" Content="thin" Height="26" VerticalAlignment="Bottom" Click="thinner"/>
-            <Button x:Name="Extend" Grid.Row="2" Grid.Column="2" Content="extend" Click="extend"/>
-            <Button x:Name="GreenControlMode" Grid.Row ="0" Grid.Column="3" Grid.ColumnSpan="2" Click="GreenControlMode_Click" Height="26" VerticalAlignment="Bottom">G Mode: Local</Button>
-            <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="4" IsEnabled="False"/>
-            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3"></Slider>
-            <Button Grid.Row="3" Grid.Column="2" Grid.ColumnSpan="3" Content="Start" Height="27" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FFEC6D6D" FontSize="14" FontWeight="Bold" />
-            <Button x:Name="testdiscord" Grid.ColumnSpan="2" Content="Test send " HorizontalAlignment="Left" Height="23" Margin="2,10,0,-7" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="Testdiscord_Click"/>
-            <Label x:Name="sftphostlbl" Content="sftphost" Grid.Column="1" Height="25" Margin="27,57.2,37,-56.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-            <Label Content="sftp user" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="27,88.2,0,-86.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
-            <Label Content="sftp pass" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="27,117.2,0,-115.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
-            <Label x:Name="url_pic" Content="urlpic" HorizontalAlignment="Left" Height="23" Margin="17,146.2,0,-143.6" Grid.Row="3" VerticalAlignment="Top" Width="54" Grid.Column="1" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="urlpic" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,146.2,0,-143.6" Grid.Row="3" TextWrapping="NoWrap" VerticalAlignment="Top" Width="142"/>
-            <PasswordBox x:Name="sftppw" Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="41,117.2,0,-115.6" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="4" Width="152"/>
-            <TextBox x:Name="sftpun" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,89.2,0,-86.6" Grid.Row="3" TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Width="120"/>
-            <TextBox x:Name="sftphost" Grid.ColumnSpan="5" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="41,61.2,0,-58.6" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="241"/>
-            <Button Grid.ColumnSpan="2" Content="bmp" HorizontalAlignment="Left" Height="24" Margin="2,40,0,-38" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="testBmp"/>
-        </Grid>
         <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
@@ -106,12 +66,61 @@
             <Label Grid.ColumnSpan="2" Grid.Row="5"  Content="Discord Hook" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="lblWH" />
             <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="132" TextInput="CopyWidth_TextInput" Margin="22.333,0.333,0,0" Grid.ColumnSpan="3" />
             <TextBox x:Name="esystem" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" TextWrapping="Wrap" Text="testing" VerticalAlignment="Top" Width="120"/>
+            <Label x:Name="Diag" Content="Diag" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="60.333,25.333,0,0" Grid.Row="5" VerticalAlignment="Top" Grid.ColumnSpan="6" Width="321" Grid.RowSpan="2"/>
         </Grid>
-        <Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="190" Grid.Row="2" Height="510" BorderBrush="Azure" >
-            <Image x:Name="VImage" Stretch="None" Source="{Binding CurrentData.VImg}"/>
-        </Border>
+        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="225" Margin="0,21.667,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+                <RowDefinition Height="25"></RowDefinition>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">Green Local Controls</Label>
+            <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="3" Content="+ width" Click="addWidth_Click" />
+            <Button x:Name="subHeigth"  Grid.Row="1" Grid.Column="4" Content="- heigth" Click="subHeigth_Click" Margin="0,0.667,0,25" Grid.RowSpan="2" />
+            <Button x:Name="Extend" Grid.Column="1" Content="extend" Click="extend" Grid.ColumnSpan="2" Margin="64.333,25,0,25" Grid.RowSpan="3"/>
+            <Button x:Name="GreenControlMode" Grid.Row ="0" Grid.Column="3" Grid.ColumnSpan="2" Click="GreenControlMode_Click" Height="26" VerticalAlignment="Bottom">G Mode: Local</Button>
+            <TextBox x:Name="txtInterval" Grid.Row="1" Grid.Column="4" IsEnabled="False"/>
+            <Slider x:Name="Interval" Grid.Row="2" Grid.Column="5" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3" Margin="0,0.333,0,0"></Slider>
+            <Button Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Content="Start" Height="50" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FFEC6D6D" FontSize="14" FontWeight="Bold" Margin="64.333,0,0,0.333" Grid.RowSpan="2" />
+            <Button x:Name="testdiscord" Grid.ColumnSpan="2" Content="Test send " HorizontalAlignment="Left" Height="23" Margin="2,2,0,0" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="Testdiscord_Click"/>
+            <Label x:Name="sftphostlbl" Content="sftphost" Height="25" Margin="64,43,0.333,-42" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+            <Label Content="sftp user" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="0.333,71,0,-69" Grid.Row="3" VerticalAlignment="Top" Width="64"/>
+            <Label Content="sftp pass" HorizontalAlignment="Left" Height="24" Margin="64,95,0,-93" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="64"/>
+            <Label x:Name="url_pic" Content="urlpic" HorizontalAlignment="Left" Height="23" Margin="0.333,124,0,-121" Grid.Row="3" VerticalAlignment="Top" Width="54" Grid.Column="1"/>
+            <TextBox x:Name="urlpic" Grid.ColumnSpan="4" Grid.Column="1" HorizontalAlignment="Left" Height="23" Margin="64.333,127,0,-124" Grid.Row="3" TextWrapping="NoWrap" VerticalAlignment="Top" Width="142"/>
+            <PasswordBox x:Name="sftppw" Grid.Column="2" HorizontalAlignment="Left" Height="24" Margin="3.667,98,0,-96" Grid.Row="3" VerticalAlignment="Top" Grid.ColumnSpan="3" Width="152"/>
+            <TextBox x:Name="sftpun" Grid.ColumnSpan="3" Grid.Column="2" HorizontalAlignment="Right" Height="23" Margin="0,75,10,-72" Grid.Row="3" TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Width="178"/>
+            <TextBox x:Name="sftphost" Grid.ColumnSpan="4" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="4.667,47,0,-44" Grid.Row="3" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="252"/>
+        </Grid>
+        <!--<Border HorizontalAlignment="Left" VerticalAlignment="Top" Width="190" Grid.Row="2" Height="434" BorderBrush="Azure" Margin="0,75.667,0,0" >
+            
+        </Border>-->
+        <Grid x:Name="BottomGrid" HorizontalAlignment="Left" Height="234" Margin="0,65.667,0,0" VerticalAlignment="Top" Width="550" Grid.Row="2">
+            <Grid.RowDefinitions>
 
 
+                <RowDefinition Height="750"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image x:Name="VImage" Stretch="None"  Margin="0,0,369,185" OpacityMask="#FFAE3E3E" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp"/>
+
+        </Grid>
+        <Image x:Name="StickImage" HorizontalAlignment="Left" Height="201" Margin="515,10,0,0" VerticalAlignment="Top" Width="100" />
 
     </Grid>
 

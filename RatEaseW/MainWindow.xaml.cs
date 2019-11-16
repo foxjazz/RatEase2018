@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Threading;
@@ -142,6 +144,8 @@ namespace RatEaseW
                 sftpun.Text = Properties.Settings.Default.sftpun;
                 urlpic.Text = Properties.Settings.Default.discordUrl;
             }
+            
+            
             setAbs();
         }
 
@@ -154,7 +158,7 @@ namespace RatEaseW
         public int height { get; set; }
         public int top;
         public int left;
-
+        private Bitmap screenBmp;
 
         private enum GreenScreen {Local, System};
 
@@ -269,6 +273,7 @@ namespace RatEaseW
 
             //pBottomRight = new System.Drawing.Point { X = left + width, Y = top +height };
             iteration = 0;
+            RedCheck = 0;
             dtimer.Start();
         }
         public TimeSpan duration { get; set; }
@@ -280,7 +285,7 @@ namespace RatEaseW
         private System.Drawing.Bitmap bm2;
         private double fRed;
         public bool foundRed { get; set; }
-
+        private int RedCheck;
         private bool CheckEveSystem()
         {
             if (curImage == null)
@@ -318,6 +323,8 @@ namespace RatEaseW
         }
         private int CheckRed()
         {
+            RedCheck++;
+            Bitmap bmap;
             if (listRedTopHeight == null)
                 listRedTopHeight = new List<RedTopHeight>();
             RedStartList = new List<int>();
@@ -326,13 +333,24 @@ namespace RatEaseW
             fRed = 0;
             int redHeight = 7;
             int ySectionStart = 0;
-            //listRedTopHeight.Clear();
-            var sp = new System.Drawing.Point(left, top);
-            var dp = new System.Drawing.Point(left + width, top + height);
             
-            curImage = sc.Capture(sp, dp);
+
+            //System.Diagnostics.Stopwatch.StartNew();
             
-            curBitmap = (Bitmap) curImage;
+            //var sp = new System.Drawing.Point(left, top);
+            //var dp = new System.Drawing.Point(left + width, top + height);
+            //curImage = sc.Capture(sp, dp);
+            //var t = Stopwatch.GetTimestamp();
+            //Diag.Content = "First" + t.ToString();
+            //System.Diagnostics.Stopwatch.StartNew();
+
+            curBitmap = new Bitmap(width,height);
+            ImageHelper.ScreenShotImage(left, top, width, height, curBitmap);
+            //t = Stopwatch.GetTimestamp();
+            //Diag.Content += " Second" + t.ToString();
+            if (RedCheck == 1 || (RedCheck % 50 == 0))
+                StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
+            
             //var img = GetImage(curBitmap);
             //images.Children.Clear();
             //images.Children.Add(img);
@@ -342,7 +360,7 @@ namespace RatEaseW
             int capW, capY;
             capW = 100;
             capY = 18;
-            curBitmap.Save(@".\testbm.bmp", ImageFormat.Bmp);
+            // curBitmap.Save(@".\testbm.bmp", ImageFormat.Bmp);
             var d = Directory.GetCurrentDirectory();
             for (int x = 0; x < width; x++)
             {
@@ -425,27 +443,12 @@ namespace RatEaseW
                     return RedCount;
                 }
             }
+            curBitmap.Dispose();
             return 0;
         }
 
         #region Bitmap_stuff
-        private void scaleImage(Bitmap image)
-        {
-            var bmp = new Bitmap((int)width, (int)height);
-            var graph = Graphics.FromImage(bmp);
-
-            // uncomment for higher quality output
-            //graph.InterpolationMode = InterpolationMode.High;
-            //graph.CompositingQuality = CompositingQuality.HighQuality;
-            //graph.SmoothingMode = SmoothingMode.AntiAlias;
-
-            var scaleWidth = (int)(image.Width * 4);
-            var scaleHeight = (int)(image.Height * 4);
-            var brush = new SolidBrush(System.Drawing.Color.Black);
-
-            graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, ((int)width - scaleWidth) / 2, ((int)height - scaleHeight) / 2, scaleWidth, scaleHeight);
-        }
+      
         private BitmapImage bmi(Bitmap bitmap)
         {
             MemoryStream ms = new MemoryStream();
@@ -457,39 +460,14 @@ namespace RatEaseW
             image.EndInit();
             return image;
         }
-        private Image GetImage(Bitmap bm)
-        {
-            BitmapImage bitmapImage = new BitmapImage();
-            bitmapImage = bmi(bm);
-
-            var img = new Image();
-
-            img.Margin = new Thickness(0, 10, 0, 0);
-            img.Source = bitmapImage;
-            img.Stretch = Stretch.None;
-
-            return img;
-        }
-        private Bitmap pushBitmap(int left, int top, ref Bitmap bm)
-        {
-            var cbm = new Bitmap(bm, 100, 14);
-            int nleft=0, ntop=0;
-            for (nleft = 0; nleft < 100; nleft++)
-            {
-                for (ntop = 0; ntop < 14; ntop++)
-                {
-                    cbm.SetPixel(nleft, ntop, bm.GetPixel(nleft + left, ntop + top));
-                }
-            }
-            return cbm;
-        }
+     
         #endregion
         private bool isSettingRect;
         DispatcherTimer dtimer, rtimer;
 
         System.Media.SoundPlayer player;
         public bool IsClear { get; set; }
-        SmaRedis subred;
+        // SmaRedis subred;
         public int RedCount { get; set; }
         
         private void PlaySound()
@@ -531,7 +509,7 @@ namespace RatEaseW
             // Send to discord
             try
             {
-                var capImage = (Bitmap)sc.Capture(new System.Drawing.Point(left, (top)), new System.Drawing.Point(left + cpyWidth, top + height));
+                var capImage = (Bitmap)sc.Capture(new Point(left, (top)), new Point(left + cpyWidth, top + height));
                 // var img2 = GetImage(capImage);
                 ds.SendMessage(esystem.Text);
                 if (sftphost.Text.Length > 4 && sftppw.Password.Length > 4)
@@ -652,69 +630,11 @@ namespace RatEaseW
                 width = 4;
             if (height < 0)
                 height = 150;
-            if (width > 10)
-                width = 4;
-
-            //gcwLocal = new GreenScreenW();
-            //gcwLocal.Top = top;
-            //gcwLocal.Left = left;
-            //gcwLocal.Width = width;
-            //gcwLocal.Height = height;
-            //gcwShowing = true;
-
-            // gcwLocal.Show();
-
-            //sLeft = Properties.Settings.Default.sLeft;
-            //sTop = Properties.Settings.Default.sTop;
-            //sWidth = Properties.Settings.Default.sWidth;
-            //sHeight = Properties.Settings.Default.sHeight;
-            //if (sLeft < 0)
-            //    sLeft = 40;
-            //if (sHeight < 5 || sHeight > 100)
-            //    sHeight = 20;
-            //if (sWidth < 20)
-            //    sWidth = 60;
-            //if (sTop < 5)
-            //    sTop = 10;
-
-
-            //gcwSystem = new GreenScreenW();
-            //gcwSystem.Top = sTop;
-            //gcwSystem.Left = sLeft;
-            //gcwSystem.Width = sWidth;
-            //gcwSystem.Height = sHeight;
-
-            //gcwSystem.Show();
-            //greenType = GreenScreen.Local;
+            width = 100;
             GreenControlMode.Content = "G Mode: Local";
             GreenGrid.Visibility = Visibility.Visible;
             Status.Background = Brushes.LightCoral;
             Status.Content = "Stopped";
-
-        }
-
-
-
-
-
-        private void thinner(object sender, RoutedEventArgs e)
-        {
-            int test=0;
-
-            if (greenType == GreenScreen.Local)
-            {
-                if (width > 1)
-                    test = (int) width - (int) Interval.Value;
-                if (test > 0)
-                    width = test;
-            }
-            else
-            {
-                if (gcwSystem.Width > 1)
-                    test = (int)gcwSystem.Width - (int)Interval.Value;
-                if (test > 0)
-                    gcwSystem.Width = test;
-            }
             setAbs();
 
         }
@@ -742,27 +662,11 @@ namespace RatEaseW
             }
             setAbs();
         }
-        private void MoveRight(object sender, RoutedEventArgs e)
-        {
-            if (greenType == GreenScreen.Local)
-            {
-                left += (int)Interval.Value;
-            }
-            else
-            {
-                gcwSystem.Left += Interval.Value;
-            }
-
-            setAbs();
-        }
+       
 
         private void setAbs()
         {
-            //left = (int)gcwLocal.Left;
-            //width = (int) gcwLocal.Width;
-            //top = (int) gcwLocal.Top;
-            //height = (int) gcwLocal.Height;
-            WindowScreenshotWithoutClass();
+            VImage.Source = ImageHelper.ScreenShotImageSource(left, top, width, height);
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
         }
       
@@ -785,38 +689,6 @@ namespace RatEaseW
             Interval.Value = (int) e.NewValue;
             txtInterval.Text = ((int) e.NewValue).ToString();
         }
-
-        private void LeftArrow_Click(object sender, RoutedEventArgs e)
-        {
-            
-            if (greenType == GreenScreen.Local)
-            {
-                left -= (int)Interval.Value;
-                
-            }
-            else
-            {
-                double test = gcwSystem.Left -= Interval.Value;
-                if (test > 0)
-                    gcwSystem.Left -= Interval.Value;
-            }
-            setAbs();
-
-        }
-
-        private void MoveDown(object sender, RoutedEventArgs e)
-        {
-            if (greenType == GreenScreen.Local)
-            {
-                top += (int) Interval.Value;
-            }
-            else
-            {
-                gcwSystem.Top += Interval.Value;
-            }
-            setAbs();
-        }
-
         private void BtnStart_Unloaded(object sender, RoutedEventArgs e)
         {
             try
@@ -825,27 +697,8 @@ namespace RatEaseW
             }
             catch { }
         }
-
-        private void Up_Click(object sender, RoutedEventArgs e)
-        {
-            if (greenType == GreenScreen.Local)
-            {
-                if ((top - Interval.Value) > 0)
-                    top -= (int)Interval.Value;
-            }
-            else
-            {
-                if ((gcwSystem.Top - Interval.Value) > 0)
-                    gcwSystem.Top -= Interval.Value;
-            }
-            setAbs();
-        }
-
         private void pickOutput_Click(object sender, RoutedEventArgs e)
         {
-            
-         
-
             var dlg = new CommonOpenFileDialog();
             dlg.Title = "Set outFolder";
             dlg.IsFolderPicker = true;
@@ -906,20 +759,7 @@ namespace RatEaseW
                 File.Delete(outFolder.Text + "\\system.txt");
         }
 
-        private void FinishSystemRectanglee_Click(object sender, RoutedEventArgs e)
-        {
-          
-        }
-
-        private void SetSystemRectanglee_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            gcwLocal.Top = 50;
-            gcwLocal.Left = 50;
-            gcwLocal.Width = 80;
-            gcwLocal.Height = 8;
-            gcwShowing = true;
-            gcwLocal.Show();
-        }
+    
 
         private string readText(string fn)
         {
@@ -994,12 +834,12 @@ namespace RatEaseW
         {
             dtimer.Stop();
             gcwSystem.Close();
-            gcwLocal.Close();
-            gcwLocal = null;
+            //gcwLocal.Close();
+            //gcwLocal = null;
             gcwSystem = null;
         }
 
-      
+
 
         private void CopyWidth_TextInput(object sender, TextCompositionEventArgs e)
         {
@@ -1007,7 +847,7 @@ namespace RatEaseW
             int i;
             if (!Int32.TryParse((string)e.Source, out i))
             {
-                copyWidth.Text = "300";
+                copyWidth.Text = "300"; //Default width of image to send to discord
             }
 
                 
@@ -1059,43 +899,40 @@ namespace RatEaseW
                     bitmap.Save(filename, ImageFormat.Bmp);
             }
         }
-        [DllImport("gdi32.dll", EntryPoint = "DeleteObject")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool DeleteObject([In] IntPtr hObject);
 
-        public ImageSource ImageSourceFromBitmap(Bitmap bmp)
+        private bool inMove;
+        private System.Windows.Point firstPosition;
+        private System.Windows.Point lastPosition;
+        private int leftStart;
+        private int topStart;
+        private void VImage_MouseMove(object sender, MouseEventArgs e)
         {
-            var handle = bmp.GetHbitmap();
-            try
-            {
-                return Imaging.CreateBitmapSourceFromHBitmap(handle, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { DeleteObject(handle); }
-        }
-        private void WindowScreenshotWithoutClass()
-        {
-
-            System.Drawing.Rectangle bounds = new System.Drawing.Rectangle(this.left, this.top, this.width, this.height);
-            using (Bitmap bitmap = new Bitmap(bounds.Width, bounds.Height))
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-
-                    g.CopyFromScreen(new Point(bounds.Left, bounds.Top), Point.Empty, bounds.Size);
-                }
-
-                VImage.Source = ImageSourceFromBitmap(bitmap);
-
-            }
-        }
-        private void testBmp(object sender, RoutedEventArgs e)
-        {
-            WindowScreenshotWithoutClass(@".\capture.bmp");
-            coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
-            
+            if (!inMove) return;
+            lastPosition = ImageHelper.GetMousePosition();
+            double x = firstPosition.X - lastPosition.X;
+            double y = firstPosition.Y - lastPosition.Y;
+            left = leftStart + (int) x;
+            top = topStart + (int) y;
+            setAbs();
         }
 
-     
+        private void VImage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            firstPosition = ImageHelper.GetMousePosition();
+            inMove = true;
+            leftStart = left;
+            topStart = top;
+        }
+
+        private void VImage_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+           
+        }
+
+        private void VImage_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            inMove = false;
+        }
 
         private bool TestOutPath()
         {
