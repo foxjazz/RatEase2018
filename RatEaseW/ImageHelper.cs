@@ -70,7 +70,7 @@ namespace RatEaseW
                     g.CopyFromScreen(new System.Drawing.Point(bounds.Left, bounds.Top), System.Drawing.Point.Empty, bounds.Size);
                     return bitmap;
                 }
-
+                
         }
 
         [DllImport("user32.dll")]

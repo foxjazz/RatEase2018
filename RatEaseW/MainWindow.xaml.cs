@@ -327,7 +327,8 @@ namespace RatEaseW
             Bitmap bmap;
             if (listRedTopHeight == null)
                 listRedTopHeight = new List<RedTopHeight>();
-            RedStartList = new List<int>();
+            if(RedStartList == null)
+                RedStartList = new List<int>();
             bool inRed = false;
             RedCount = 0;
             fRed = 0;
@@ -337,15 +338,16 @@ namespace RatEaseW
 
             //System.Diagnostics.Stopwatch.StartNew();
             
-            //var sp = new System.Drawing.Point(left, top);
-            //var dp = new System.Drawing.Point(left + width, top + height);
-            //curImage = sc.Capture(sp, dp);
+            var sp = new System.Drawing.Point(left, top);
+            var dp = new System.Drawing.Point(left + width, top + height);
+            curBitmap = (Bitmap)sc.Capture(sp, dp);
+            
             //var t = Stopwatch.GetTimestamp();
             //Diag.Content = "First" + t.ToString();
             //System.Diagnostics.Stopwatch.StartNew();
-
-            curBitmap = new Bitmap(width,height);
-            ImageHelper.ScreenShotImage(left, top, width, height, curBitmap);
+            //if(curBitmap == null)
+            //    curBitmap = new Bitmap(width,height);
+            //ImageHelper.ScreenShotImage(left, top, width, height, curBitmap);
             //t = Stopwatch.GetTimestamp();
             //Diag.Content += " Second" + t.ToString();
             if (RedCheck == 1 || (RedCheck % 50 == 0))
@@ -443,7 +445,7 @@ namespace RatEaseW
                     return RedCount;
                 }
             }
-            curBitmap.Dispose();
+            
             return 0;
         }
 
@@ -538,10 +540,7 @@ namespace RatEaseW
                 width = 3;
             }
                 
-                //height = (int) gcwLocal.Height;
-                //width = (int) gcwLocal.Width;
-                //top = (int) gcwLocal.Top;
-                //left = (int) gcwLocal.Left;
+
                 Properties.Settings.Default.left = left;
                 Properties.Settings.Default.top = top;
                 Properties.Settings.Default.width = width;
