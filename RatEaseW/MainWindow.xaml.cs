@@ -665,6 +665,7 @@ namespace RatEaseW
 
         private void setAbs()
         {
+            width = 500;
             VImage.Source = ImageHelper.ScreenShotImageSource(left, top, width, height);
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
         }
