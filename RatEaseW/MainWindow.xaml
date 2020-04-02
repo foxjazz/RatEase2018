@@ -118,7 +118,7 @@
 
                 <RowDefinition Height="750"></RowDefinition>
             </Grid.RowDefinitions>
-            <Image x:Name="VImage"  Margin="1,1,22,185" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp" MouseLeave="VImage_MouseLeave" Stretch="None"/>
+            <Image x:Name="VImage"  Margin="1,1,63,185" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp" MouseLeave="VImage_MouseLeave" Stretch="None"/>
 
         </Grid>
         <Image x:Name="StickImage" HorizontalAlignment="Left" Height="201" Margin="515,10,0,0" VerticalAlignment="Top" Width="100" Stretch="None" />

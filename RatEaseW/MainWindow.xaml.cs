@@ -574,6 +574,7 @@ namespace RatEaseW
             Status.Content = "Started";
             eveSystemBid = 0;
             dtimer.Start();
+            width = 3;
             setAbs();
 
         }
@@ -610,7 +611,12 @@ namespace RatEaseW
             player.Load();
             player.Play();
         }
-
+        private void setAbs()
+        {
+            
+            VImage.Source = ImageHelper.ScreenShotImageSource(left, top, width, height);
+            coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
+        }
         private void SetRectangle(object sender, RoutedEventArgs e)
         {
 
@@ -629,7 +635,7 @@ namespace RatEaseW
                 width = 4;
             if (height < 0)
                 height = 150;
-            width = 100;
+            width = 500;
             GreenControlMode.Content = "G Mode: Local";
             GreenGrid.Visibility = Visibility.Visible;
             Status.Background = Brushes.LightCoral;
@@ -663,12 +669,7 @@ namespace RatEaseW
         }
        
 
-        private void setAbs()
-        {
-            width = 500;
-            VImage.Source = ImageHelper.ScreenShotImageSource(left, top, width, height);
-            coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
-        }
+       
       
 
         private void extend(object sender, RoutedEventArgs e)
