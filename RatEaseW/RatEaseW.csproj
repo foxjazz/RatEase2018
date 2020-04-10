@@ -173,6 +173,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ColorData.cs" />
     <Compile Include="DiscordSend.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Info.cs" />

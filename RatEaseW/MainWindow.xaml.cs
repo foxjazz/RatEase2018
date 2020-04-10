@@ -8,6 +8,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Text;
+using System.Windows.Interop;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using Brush = System.Drawing.Brush;
@@ -24,11 +26,17 @@ namespace RatEaseW
         {
             InitializeComponent();
             gcwShowing = false;
+            state = false;
             DataContext = CurrentData.Instance;
             dtimer = new DispatcherTimer();
             dtimer.Interval = new TimeSpan(0,0,0,0,250);
             dtimer.Tick += Dtimer_Tick;
-
+            secondText = new DispatcherTimer();
+            secondText.Interval = new TimeSpan(0,0,0,2);
+            colorTextOn = false;
+            secondText.Tick += secondText_Tick;
+            secondText.Start();
+            
             isSettingRect = false;
             msg = CurrentData.Instance.RedData;
             openFileDialog1 = new OpenFileDialog();
@@ -73,9 +81,17 @@ namespace RatEaseW
             keyDownTimer = DateTime.Now;
             copyWidth.Text = Properties.Settings.Default.cpyWidth;
             populateNotificationData();
+            this.dcList = new ColorData();
+            this.ColorList.BringIntoView();
+            this.calibrate();
+            
+            
         }
+
+        private ColorData dcList;
         private void populateNotificationData()
         {
+            
             var d = Directory.GetCurrentDirectory();
             if (File.Exists($@"{d}\config\config.txt"))
             {
@@ -120,6 +136,8 @@ namespace RatEaseW
         }
         DiscordSend ds;
         private bool isOutPathValid;
+        private bool setRectangle;
+        private Message msg;
         public GreenScreenW gcwLocal { get; set; }
         public GreenScreenW gcwSystem { get; set; }
         public int width { get; set; }
@@ -153,9 +171,54 @@ namespace RatEaseW
         private int eveSystemBid;
         private int checkSystemCounter;
         private bool isSystemDifferent;
+
+        private bool colorTextOn;
+
+        private bool state;
         //public System.Drawing.Point pTopleft { get; set; }
         //public System.Drawing.Point pBottomRight { get; set; }
+
+        private void secondText_Tick(object sender, EventArgs e)
+        {
+            colorTextOn = true;
+            
+            state = showGreenScreen(!state);
+        }
         public int iteration { get; set; }
+
+        private void calibrate()
+        {
+            int xx;
+            var sp = new System.Drawing.Point(left, top);
+            if (left < 50)
+            {
+                xx = 0;
+            }
+            else
+            {
+                xx = left - 50;
+            }
+
+            var dp = new System.Drawing.Point(left + width, top + height);
+            curBitmap = (Bitmap)sc.Capture(sp, dp);
+            for (int x = xx; x < width + 50; x++)
+            {
+                for (int y = 0; y < 200; y++)
+                {
+                    var pixel = curBitmap.GetPixel(x, y);
+                    if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                    {
+                        pixel = curBitmap.GetPixel(x, y + 1);
+                        if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                        {
+                            left += y;
+                            return;
+                        }
+                    }
+                }
+            }
+            
+        }
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
@@ -163,14 +226,14 @@ namespace RatEaseW
             {
                
             }
-            if (checkSystemCounter > 6)
-            {
-                isSystemDifferent = CheckEveSystem();
-                checkSystemCounter = 0;  // only want to check every few seconds.
-                if (isSystemDifferent)
-                    checkSystemCounter = -20;  //set it back to allow time to change again.
-            }
-            checkSystemCounter++;
+            //if (checkSystemCounter > 6)
+            //{
+            //    isSystemDifferent = CheckEveSystem();
+            //    checkSystemCounter = 0;  // only want to check every few seconds.
+            //    if (isSystemDifferent)
+            //        checkSystemCounter = -20;  //set it back to allow time to change again.
+            //}
+            //checkSystemCounter++;
             if (waitIterations > 0)
             {
                 waitIterations--;
@@ -180,7 +243,6 @@ namespace RatEaseW
             {
                 waitIterations = 5;
                 waitASecond = false;
-
             }
 
             if (populateResult)
@@ -192,6 +254,7 @@ namespace RatEaseW
             {
                 
                 reds = CheckRed();
+                colorTextOn = false;
             }
             if (reds != redsPrev)
             {
@@ -279,19 +342,30 @@ namespace RatEaseW
             curBitmap = (Bitmap)sc.Capture(sp, dp);
             if (RedCheck == 1 || (RedCheck % 50 == 0))
                 StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
-            
-            RedStartList.Clear();
+     
+                RedStartList.Clear();
+           
+
             int xRedPosition = -1;
 
             int capW, capY;
             capW = 100;
             capY = 18;
             var d = Directory.GetCurrentDirectory();
+            if (colorTextOn)
+            {
+                dcList.clear();
+            }
             for (int x = 0; x < width; x++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     var pixel = curBitmap.GetPixel(x, y);
+                    if (colorTextOn && y < 300)
+                    {   
+                        dcList.setD(pixel.R, pixel.G, pixel.B, y);
+                    }
+                    populateCL();
                     if (pixel.R > red && pixel.B < 16 && pixel.G < 15) // defined as red.
                     {
                         redPixel = new System.Drawing.Point(left + x, top + y);
@@ -357,11 +431,23 @@ namespace RatEaseW
                     return RedCount;
                 }
             }
+
             
             return 0;
         }
         #region Bitmap_stuff
-      
+
+        private void populateCL()
+        {
+            var data = dcList.get();
+            StringBuilder sb = new StringBuilder();
+            foreach (var v in data)
+            {
+                sb.Append(v + "\r\n");
+            }
+
+            colorText.Text = sb.ToString();
+        }
         private BitmapImage bmi(Bitmap bitmap)
         {
             MemoryStream ms = new MemoryStream();
@@ -376,7 +462,7 @@ namespace RatEaseW
      
         #endregion
         private bool isSettingRect;
-        DispatcherTimer dtimer, rtimer;
+        DispatcherTimer dtimer, secondText;
 
         System.Media.SoundPlayer player;
         public bool IsClear { get; set; }
@@ -776,6 +862,25 @@ namespace RatEaseW
 
         }
 
+        private bool showGreenScreen(bool show)
+        {
+            gcwLocal.Left = 0;
+            gcwLocal.Top = 0;
+            gcwLocal.Width = SystemParameters.PrimaryScreenWidth;
+            gcwLocal.Height = SystemParameters.PrimaryScreenHeight;
+            if (show)
+            {
+                gcwLocal.Show();
+                gcwLocal.BringIntoView();
+
+            }
+            else
+            {
+                gcwLocal.Hide();
+            }
+
+            return show;
+        }
         private Rectangle Bounds;
         private void WindowScreenshotWithoutClass(String filename)
         {
