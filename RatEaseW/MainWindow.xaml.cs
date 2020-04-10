@@ -1,29 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using System.Windows;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
-using System.Runtime.ExceptionServices;
-using System.Runtime.InteropServices;
-using System.Windows.Interop;
 using System.Windows.Threading;
-
 using Microsoft.Win32;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using Brush = System.Drawing.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Image = System.Windows.Controls.Image;
@@ -32,10 +18,6 @@ using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace RatEaseW
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    /// 
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -71,19 +53,12 @@ namespace RatEaseW
                 height = 100;
 
             }
-
-            
-
             outFolder.Text =Properties.Settings.Default.outFolder;
             discordHook.Text = Properties.Settings.Default.discord;
-            //resultFolder.Text = Properties.Settings.Default.resultFolder;
-
-            //System region Setting
             sLeft = Properties.Settings.Default.sLeft;
             sTop = Properties.Settings.Default.sTop;
             sWidth = Properties.Settings.Default.sWidth;
             sHeight = Properties.Settings.Default.sHeight;
-
             sc = new ScreenCapture();
             RedInSystem = false;
             reds = 0;
@@ -94,16 +69,11 @@ namespace RatEaseW
             setRectangle = true;
             GreenGrid.Visibility = Visibility.Visible;
             checkSystemCounter = 0;
-            
             isOutPathValid = TestOutPath();
             keyDownTimer = DateTime.Now;
             copyWidth.Text = Properties.Settings.Default.cpyWidth;
-
             populateNotificationData();
-
         }
-
-        
         private void populateNotificationData()
         {
             var d = Directory.GetCurrentDirectory();
@@ -148,8 +118,6 @@ namespace RatEaseW
             
             setAbs();
         }
-
-
         DiscordSend ds;
         private bool isOutPathValid;
         public GreenScreenW gcwLocal { get; set; }
@@ -158,25 +126,16 @@ namespace RatEaseW
         public int height { get; set; }
         public int top;
         public int left;
-        private Bitmap screenBmp;
 
         private enum GreenScreen {Local, System};
-
         private DateTime keyDownTimer;
-
-        
         private GreenScreen greenType;
         private int sWidth;
         private int sHeight;
         private int sTop;
         private int sLeft;
-
         public ScreenCapture sc { get; set; }
-        
-        Message msg;
         FileDialog openFileDialog1;
-
-        private bool setRectangle;
         byte red = 130;
         private int redV;
         private List<int> RedStartList;
@@ -190,13 +149,9 @@ namespace RatEaseW
         private DateTime RedCheckStart;
         private bool populateResult;
         private int cpyWidth = 300;
-
         private int waitIterations;
-        
         private int eveSystemBid;
-
         private int checkSystemCounter;
-
         private bool isSystemDifferent;
         //public System.Drawing.Point pTopleft { get; set; }
         //public System.Drawing.Point pBottomRight { get; set; }
@@ -256,22 +211,7 @@ namespace RatEaseW
                 RedInSystem = false;
                 PlaySound();
             }
-
-
-            //if (subred == null)
-            //    subred = new SmaRedis();
-            //if (!subred.Connected)
-            //{
-            //    MessageBox.Show("Service is not active.");
-            //    return;
-            //}
-            //subred.sublist = listAlerts;
-            //subred.Subscribe("fade", CurrentData.Instance);
-            //lblDetectedRed.Text = "Started";
             cnt = 0;
-           
-
-            //pBottomRight = new System.Drawing.Point { X = left + width, Y = top +height };
             iteration = 0;
             RedCheck = 0;
             dtimer.Start();
@@ -334,35 +274,18 @@ namespace RatEaseW
             fRed = 0;
             int redHeight = 7;
             int ySectionStart = 0;
-            
-
-            //System.Diagnostics.Stopwatch.StartNew();
-            
             var sp = new System.Drawing.Point(left, top);
             var dp = new System.Drawing.Point(left + width, top + height);
             curBitmap = (Bitmap)sc.Capture(sp, dp);
-            
-            //var t = Stopwatch.GetTimestamp();
-            //Diag.Content = "First" + t.ToString();
-            //System.Diagnostics.Stopwatch.StartNew();
-            //if(curBitmap == null)
-            //    curBitmap = new Bitmap(width,height);
-            //ImageHelper.ScreenShotImage(left, top, width, height, curBitmap);
-            //t = Stopwatch.GetTimestamp();
-            //Diag.Content += " Second" + t.ToString();
             if (RedCheck == 1 || (RedCheck % 50 == 0))
                 StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
             
-            //var img = GetImage(curBitmap);
-            //images.Children.Clear();
-            //images.Children.Add(img);
             RedStartList.Clear();
             int xRedPosition = -1;
 
             int capW, capY;
             capW = 100;
             capY = 18;
-            // curBitmap.Save(@".\testbm.bmp", ImageFormat.Bmp);
             var d = Directory.GetCurrentDirectory();
             for (int x = 0; x < width; x++)
             {
@@ -371,26 +294,17 @@ namespace RatEaseW
                     var pixel = curBitmap.GetPixel(x, y);
                     if (pixel.R > red && pixel.B < 16 && pixel.G < 15) // defined as red.
                     {
-                        //dtimer.Stop();
-                        //lblTopLeft.Text = x.ToString() + " - " + y.ToString();
                         redPixel = new System.Drawing.Point(left + x, top + y);
                         foundRed = true;
                         fRed++;
                         if (fRed == 1)
                         {
-
                             xRedPosition = x;
                             if (xRedPosition > 0)
                             { //This will set the position of starting red
                                 left = left + x;
                                 width = 1;
                             }
-                            // The - one on the y axis if to allow font kerning to get the whole name;
-                            // var capImage = (Bitmap) sc.Capture(new System.Drawing.Point(left + x + 5, (top + y) - 2), new System.Drawing.Point(capW + left + x,capY + top + y));
-                            //var bitmap = pushBitmap(left, top, ref curBitmap);
-                            // var img2 = GetImage(capImage);
-                            //images.Children.Add(img2);
-                            // Bitmap resized = new Bitmap(capImage, new System.Drawing.Size(capImage.Width * 4, capImage.Height * 4));
                             string fname = outFolder.Text + "\\t" + RedCount + ".bmp";
                            
                             try
@@ -398,7 +312,6 @@ namespace RatEaseW
                                 if (isOutPathValid)
                                 {
                                     File.Delete(fname);
-                                    //resized.Save(fname, ImageFormat.Bmp);
                                 }
                             }
                             catch 
@@ -407,7 +320,6 @@ namespace RatEaseW
                             //scaleImage(capImage);
                             y += redHeight;
                         }
-                        //lblDetectedRed.Text = "lblDetected Red";
                         IsClear = false;
                         if (inRed == false)
                         {
@@ -448,7 +360,6 @@ namespace RatEaseW
             
             return 0;
         }
-
         #region Bitmap_stuff
       
         private BitmapImage bmi(Bitmap bitmap)
@@ -529,8 +440,6 @@ namespace RatEaseW
 
             }
         }
-
-     
         private void Start_Click(object sender, RoutedEventArgs e)
         {
             ds = new DiscordSend(discordHook.Text);
@@ -539,8 +448,6 @@ namespace RatEaseW
             {
                 width = 3;
             }
-                
-
                 Properties.Settings.Default.left = left;
                 Properties.Settings.Default.top = top;
                 Properties.Settings.Default.width = width;
@@ -595,7 +502,6 @@ namespace RatEaseW
             player.Load();
             player.Play();
         }
-
         private void SetClearSound_Click(object sender, RoutedEventArgs e)
         {
             openFileDialog1.Title = "Pick sound all clear file";
@@ -667,11 +573,6 @@ namespace RatEaseW
             }
             setAbs();
         }
-       
-
-       
-      
-
         private void extend(object sender, RoutedEventArgs e)
         {
             if (greenType == GreenScreen.Local)
