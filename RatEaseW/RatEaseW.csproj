@@ -183,6 +183,7 @@
     <Compile Include="Message.cs" />
     <Compile Include="RedTopHeight.cs" />
     <Compile Include="ScreenCapture.cs" />
+    <Compile Include="Sliver.cs" />
     <Compile Include="SmaRedis.cs" />
     <Page Include="GreenScreenW.xaml">
       <SubType>Designer</SubType>

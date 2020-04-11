@@ -8,11 +8,13 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using Brush = System.Drawing.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Color = System.Drawing.Color;
@@ -50,6 +52,16 @@ namespace RatEaseW
             top = Properties.Settings.Default.top;
             width = Properties.Settings.Default.width;
             height = Properties.Settings.Default.height;
+            try
+            {
+                sliverList = (List<Sliver>) StringToObject(Properties.Settings.Default.SliverList);
+            }
+            catch
+            {
+                sliverList = new List<Sliver>();
+            }
+
+            Saved.Text = $"{sliverList.Count}";
             if (left < 0) {left = 120;}
             if (top < 0) { top = 420; }
 
@@ -82,24 +94,37 @@ namespace RatEaseW
             isOutPathValid = TestOutPath();
             keyDownTimer = DateTime.Now;
             copyWidth.Text = Properties.Settings.Default.cpyWidth;
+            cidxCheck = 0;
             populateNotificationData();
             this.dcList = new ColorData();
-            
-            var calibrated = this.calibrate();
-            if (calibrated)
+            setData();
+            foreach (var sl in sliverList)
             {
-                this.start();
-            }
-            else
-            {
-                width = 300;
-                setAbs();
-
+                bool calibrated = this.calibrate(sl);
+                if (!calibrated)
+                {
+                    width = 300;
+                    setAbs();
+                    return;
+                }
             }
             
+           
+            this.start();
+          
             
+          
         }
 
+        private void setData()
+        {
+            coordinateList.Text = "";
+            foreach (var sl in sliverList)
+            {
+                coordinateList.Text += $"L: {sl.left} T: {sl.top} W: {sl.width} H: {sl.height} \r\n";
+            }
+        }
+        private List<Sliver> sliverList;
         private ColorData dcList;
         private void populateNotificationData()
         {
@@ -147,7 +172,9 @@ namespace RatEaseW
             setAbs();
         }
         DiscordSend ds;
+        private int currentIdx;
         private bool isOutPathValid;
+        private int cidxCheck;
         private bool setRectangle;
         private Message msg;
         public GreenScreenW gcwLocal { get; set; }
@@ -231,8 +258,8 @@ namespace RatEaseW
 
         }
         public int iteration { get; set; }
-
-        private bool calibrate()
+        
+        private bool calibrate(Sliver sl)
         {
             int xx;
             var sp = new System.Drawing.Point(left - 20, top);
@@ -249,11 +276,28 @@ namespace RatEaseW
                         pixel = calBitmap.GetPixel(x, y + 1);
                         if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                         {
-                            left += (x - 20);
+                            sl.left += (x - 20);
+                            sl.calibrated = true;
                             return true ;
                         }
                     }
                 }
+            }
+
+            sl.calibrated = false;
+            return false;
+        }
+
+        private bool pullNextSliver()
+        {
+            if (sliverList.Count > 0)
+            {
+                if (sliverList.Count <= cidxCheck )
+                {
+                    cidxCheck = 0;
+                }
+                pullSliver(sliverList[cidxCheck]);
+                return true;
             }
 
             return false;
@@ -261,18 +305,14 @@ namespace RatEaseW
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
-            if (keyDownTimer.AddMinutes(10) < DateTime.Now)
+            if (!pullNextSliver())
             {
-               
+                var sl = new Sliver();
+                setSliver(sl);
+                sliverList.Add(sl);
             }
-            //if (checkSystemCounter > 6)
-            //{
-            //    isSystemDifferent = CheckEveSystem();
-            //    checkSystemCounter = 0;  // only want to check every few seconds.
-            //    if (isSystemDifferent)
-            //        checkSystemCounter = -20;  //set it back to allow time to change again.
-            //}
-            //checkSystemCounter++;
+
+            width = 3;
             if (waitIterations > 0)
             {
                 waitIterations--;
@@ -575,6 +615,8 @@ namespace RatEaseW
             {
                 width = 3;
             }
+
+            Properties.Settings.Default.SliverList = ObjectToString(sliverList);
             Properties.Settings.Default.left = left;
             Properties.Settings.Default.top = top;
             Properties.Settings.Default.width = width;
@@ -702,6 +744,9 @@ namespace RatEaseW
             {
                 gcwSystem.Height -= (int)Interval.Value;
             }
+            var sl = sliverList[cidxCheck];
+            setSliver(sl);
+            setData();
             setAbs();
         }
         private void extend(object sender, RoutedEventArgs e)
@@ -714,6 +759,10 @@ namespace RatEaseW
             {
                 gcwSystem.Height += Interval.Value;
             }
+
+            var sl = sliverList[cidxCheck];
+            setSliver(sl);
+            setData();
             setAbs();
         }
 
@@ -963,6 +1012,15 @@ namespace RatEaseW
             double y = firstPosition.Y - lastPosition.Y;
             left = leftStart + (int) x;
             top = topStart + (int) y;
+            if (left <= 0)
+            {
+                left = 1;
+            }
+
+            if (top <= 0)
+            {
+                top = 1;
+            }
             setAbs();
         }
 
@@ -1010,6 +1068,90 @@ namespace RatEaseW
             }
             return true;
         }
+        public string ObjectToString(List<Sliver> obj)
+        {
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                new BinaryFormatter().Serialize(ms, obj);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        private void ResetIdx_Click(object sender, RoutedEventArgs e)
+        {
+            sliverList.Clear();
+            currentIdx = 0;
+            CurrentIndex.Text = $"{currentIdx}";
+        }
+
+        private void SaveAdd_Click(object sender, RoutedEventArgs e)
+        {
+            var sl = new Sliver();
+            setSliver(sl);
+            sliverList.Add(sl);
+            currentIdx++;
+            CurrentIndex.Text = $"{currentIdx}";
+            Saved.Text = $"{sliverList.Count}";
+            setData();
+        }
+
+        private void CheckNextSliver_Click(object sender, RoutedEventArgs e)
+        {
+            if (sliverList.Count > 0)
+            {
+                if (sliverList.Count <= cidxCheck)
+                {
+                    cidxCheck = 0;
+                }
+                var sliver = sliverList[cidxCheck];
+                pullSliver(sliver);
+              
+                setAbs();
+                UpdateIndex.Text = $"{cidxCheck}";
+                cidxCheck++;
+                
+            }
+
+        }
+
+        private void pullSliver(Sliver lv)
+        {
+            left = lv.left;
+            top = lv.top;
+            width = lv.width;
+            height = lv.height;
+        }
+
+        private void setSliver(Sliver lv)
+        {
+            lv.left = left;
+            lv.top = top;
+            lv.width = width;
+            lv.height = height;
+        }
+
+   
+
        
+
+        private void Update_Click_1(object sender, RoutedEventArgs e)
+        {
+            var sl = sliverList[cidxCheck];
+            setSliver(sl);
+            setData();
+        }
+
+        public object StringToObject(string base64String)
+        {
+            byte[] bytes = Convert.FromBase64String(base64String);
+            using (MemoryStream ms = new MemoryStream(bytes, 0, bytes.Length))
+            {
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Position = 0;
+                return new BinaryFormatter().Deserialize(ms);
+            }
+        }
+
     }
 }

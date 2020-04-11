@@ -17,7 +17,7 @@
             <RowDefinition Height="750"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="50,22,0,0" VerticalAlignment="Top" Width="450" Grid.Row="0">
+        <Grid x:Name="ControlGrid" HorizontalAlignment="Left" Height="180" Margin="26,22,0,0" VerticalAlignment="Top" Width="514" Grid.Row="0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
@@ -36,37 +36,48 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
 
             </Grid.ColumnDefinitions>
 
 
-            <Button Grid.Row="2" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Alert Sound" x:Name="SetAlertSound" FontFamily="Georgia" Click="SetAlertSound_Click" Foreground="#FFE6F704" Background="#FF040000"/>
-            <Button Grid.Row="3" Grid.Column="4" Grid.ColumnSpan="2" Content="Set Clear Sound" x:Name="SetClearSound" FontFamily="Georgia" Click="SetClearSound_Click" Background="Black" Foreground="#FFFCFF00"/>
+            <Button Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Content="Set Alert Sound" x:Name="SetAlertSound" FontFamily="Georgia" Click="SetAlertSound_Click" Foreground="#FFE6F704" Background="#FF040000" Margin="0,0,0,1"/>
+            <Button Grid.Row="1" Grid.Column="5" Grid.ColumnSpan="2" Content="Set Clear Sound" x:Name="SetClearSound" FontFamily="Georgia" Click="SetClearSound_Click" Background="Black" Foreground="#FFFCFF00" Margin="0,1,0,24.333" Grid.RowSpan="2"/>
             <Label x:Name="Status" Grid.Row ="1" Grid.ColumnSpan="1" Background="#FF090000" Foreground="#FFF70505">Stopped</Label>
             <Label x:Name="lbl1" Grid.Row ="1" Grid.Column="1" Foreground="#FFFFEA00">Red Count:</Label>
 
             <TextBox x:Name="redCount" Grid.Row="1" Grid.Column="2" TextChanged="RedCount_TextChanged" Background="Black" Foreground="#FFF6E30A"></TextBox>
-
-
-
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="4" Grid.RowSpan="3" Grid.ColumnSpan="3">
+                <TextBlock x:Name="coordinateList"  Text="Init" Foreground="#FFEAD91A" FontSize="11"></TextBlock>
+            </ScrollViewer>
+            <Button x:Name="ResetIdx" Grid.Row="4" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Height="25" Margin="0.333,0,0,0" VerticalAlignment="Top" Click="ResetIdx_Click">Reset Idx</Button>
+            <Button x:Name="SaveAdd" Grid.Row="5" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Click="SaveAdd_Click" FontSize="10">Save / Add</Button>
+            <Button x:Name="CheckNextSliver" Grid.Row="6" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Click="CheckNextSliver_Click" FontSize="9">Check Next</Button>
+            <Button x:Name="Update" Grid.Row="6" Grid.Column="8" Background="#FF0E1209" Foreground="#FFAD18CA" Click="Update_Click_1" FontSize="9">Update</Button>
+            <Label Grid.Row="4" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18">Index</Label>
+            <Label Grid.Row="4" Grid.Column="8" Background="#FF0E1209" Foreground="#FF5BCA18">Saved</Label>
+            <TextBox x:Name="Saved" Grid.Row="5" Grid.Column="8" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
+            <TextBox x:Name="CurrentIndex" Grid.Row="5" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
+            <TextBox x:Name="UpdateIndex" Grid.Row="6" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
             <Label x:Name="EveSystem" Grid.Column="1" Content="System:" Background="Black" Foreground="#FFFFEA00" />
-            <Button x:Name="SetREctangle" Grid.Column="4" Grid.Row="1" Content="Set red sliver" HorizontalAlignment="Right" Width="150" Grid.ColumnSpan="3" Margin="0,0,0,1" Click="SetRectangle" Foreground="#FFEDFF04" Background="#FF240202"/>
+            <Button x:Name="SetREctangle" Grid.Column="4" Content="Set red sliver" HorizontalAlignment="Right" Width="150" Grid.ColumnSpan="3" Margin="0,3,0,24" Click="SetRectangle" Foreground="#FFEDFF04" Background="#FF240202" Grid.RowSpan="2"/>
             <!--<Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle" MouseRightButtonUp="SetSystemRectanglee_MouseRightButtonUp" Height="25" VerticalAlignment="Bottom"/>-->
 
             <!--<ComboBox Grid.Column="4" Grid.ColumnSpan="2" ItemsSource="{Binding CurrentData.CaptureMode}" />-->
-            <TextBox x:Name="coord" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Width="119" FontFamily="Ebrima" HorizontalAlignment="Right" Margin="0,0,9,0" Foreground="#FFE8FA00" Background="Black"></TextBox>
+            <TextBox x:Name="coord" Grid.Row="3" Grid.Column="6" Width="39" FontFamily="Ebrima" HorizontalAlignment="Right" Margin="0,1,25,24.333" Foreground="#FFE8FA00" Background="Black" Grid.RowSpan="2"/>
 
-            <Button x:Name="pickOutput" Grid.Row="3" Grid.Column="0" Height="25" VerticalAlignment="Top" Click="pickOutput_Click" Foreground="#FFFFDB00" Background="Black">Set Output</Button>
-            <TextBox x:Name="outFolder" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Foreground="#FFEDFF00" Background="Black"></TextBox>
-            <TextBox x:Name="redline" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="6" Background="Black" Foreground="#FFEDFF00"></TextBox>
-            <Button x:Name="copy" Grid.Row="4" Grid.Column="0" Click="copy_Click" Background="Black" Foreground="#FFFAF501">Cpy</Button>
-            <Label Grid.ColumnSpan="3" Grid.Row="5"  Content="Width to copy - discord" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="copyDiscDesc" AutomationProperties.HelpText="This is inteneded to copy data from overview to discord" Grid.Column="3" Margin="54,0,0,0" Width="131" Foreground="#FFFFD304"/>
+            <Button x:Name="pickOutput" Grid.Row="2" Grid.Column="0" Height="25" VerticalAlignment="Top" Click="pickOutput_Click" Foreground="#FFFFDB00" Background="Black" Grid.ColumnSpan="2" Margin="0,0,64.333,0">Set Output</Button>
+            <TextBox x:Name="outFolder" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Foreground="#FFEDFF00" Background="Black" Margin="0.333,1,63,24.333" Grid.RowSpan="2"></TextBox>
+            <TextBox x:Name="redline" Grid.Row="3" Grid.Column="1" Background="Black" Foreground="#FFEDFF00" Margin="0.333,1,42.333,0.333" RenderTransformOrigin="0.727,-0.462"/>
+            <Button x:Name="copy" Grid.Row="2" Grid.Column="0" Click="copy_Click" Background="Black" Foreground="#FFFAF501" Grid.ColumnSpan="2" Height="26" Margin="0,25,64.333,0" Grid.RowSpan="2" VerticalAlignment="Top">Cpy</Button>
+            <Label Grid.ColumnSpan="2" Grid.Row="1"  Content="Width to copy - discord" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="copyDiscDesc" AutomationProperties.HelpText="This is inteneded to copy data from overview to discord" Grid.Column="4" Margin="1,25,0,0" Width="121" Foreground="#FFFFD304" Grid.RowSpan="2"/>
 
-            <TextBox Grid.Column="5" Grid.Row="5" x:Name="copyWidth" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="52" TextInput="CopyWidth_TextInput" Margin="61,0,0,0" Grid.ColumnSpan="2" Background="Black" Foreground="#FFF6F800" />
-            <Label Grid.ColumnSpan="2" Grid.Row="5"  Content="Discord Hook" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="lblWH" Foreground="#FFFFD300" />
-            <TextBox x:Name="discordHook" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="132" TextInput="CopyWidth_TextInput" Margin="22.333,0.333,0,0" Grid.ColumnSpan="3" Foreground="#FFE6F703" Background="Black" />
+            <TextBox Grid.Column="5" Grid.Row="2" x:Name="copyWidth" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="52" TextInput="CopyWidth_TextInput" Margin="63,2,0,0" Grid.ColumnSpan="2" Background="Black" Foreground="#FFF6F800" Grid.RowSpan="2" />
+            <Label Grid.ColumnSpan="2" Grid.Row="2"  Content="Discord Hook" HorizontalAlignment="Left"  VerticalAlignment="Top"  x:Name="lblWH" Foreground="#FFFFD300" Grid.Column="1" Margin="27.333,24,0,0" Grid.RowSpan="2" />
+            <TextBox x:Name="discordHook" Grid.Column="3" Grid.Row="3" HorizontalAlignment="Left"   TextWrapping="NoWrap" Text="TextBox" VerticalAlignment="Top" Height="25" Width="132" TextInput="CopyWidth_TextInput" Margin="0,1,0,0" Grid.ColumnSpan="3" Foreground="#FFE6F703" Background="Black" />
             <TextBox x:Name="esystem" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" TextWrapping="Wrap" Text="testing" VerticalAlignment="Top" Width="120" Foreground="#FFFECB05" Background="Black"/>
-            <Label x:Name="Diag" Content="Diag" Grid.Column="1" HorizontalAlignment="Left" Height="24" Margin="60.333,25.333,0,0" Grid.Row="5" VerticalAlignment="Top" Grid.ColumnSpan="6" Width="321" Grid.RowSpan="2"/>
+            <Label x:Name="Diag" Content="Diag" Grid.Column="8" HorizontalAlignment="Left" Height="24" Margin="24.333,3,0,0" Grid.Row="3" VerticalAlignment="Top" Width="32" Grid.RowSpan="2"/>
         </Grid>
         <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="225" Margin="0,21.667,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
