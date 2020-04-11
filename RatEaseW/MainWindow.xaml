@@ -116,11 +116,11 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="750"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid x:Name="ColorList"  Height="442" VerticalAlignment="Bottom" Margin="24,0,370,298" Visibility="Hidden">
+            <!--<Grid x:Name="ColorList"  Height="442" VerticalAlignment="Bottom" Margin="24,0,370,298" Visibility="Hidden">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <TextBlock x:Name="colorText" Foreground="#FFE9D1BC" FontSize="9" ></TextBlock>
                 </ScrollViewer>
-            </Grid>
+            </Grid>-->
 
             <Image x:Name="VImage"  Margin="1,1,63,185" Grid.Row="0" MouseMove="VImage_MouseMove" MouseLeftButtonDown="VImage_MouseLeftButtonDown" MouseRightButtonDown="VImage_MouseRightButtonDown" MouseLeftButtonUp="VImage_MouseLeftButtonUp" MouseLeave="VImage_MouseLeave" Stretch="None"/>
 

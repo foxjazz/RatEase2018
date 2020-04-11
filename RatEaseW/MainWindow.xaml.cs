@@ -84,11 +84,17 @@ namespace RatEaseW
             copyWidth.Text = Properties.Settings.Default.cpyWidth;
             populateNotificationData();
             this.dcList = new ColorData();
-            this.ColorList.BringIntoView();
+            
             var calibrated = this.calibrate();
             if (calibrated)
             {
                 this.start();
+            }
+            else
+            {
+                width = 300;
+                setAbs();
+
             }
             
             
@@ -398,8 +404,8 @@ namespace RatEaseW
                     if (colorTextOn && y < 300)
                     {   
                         dcList.setD(pixel.R, pixel.G, pixel.B, y);
+                        populateCL();
                     }
-                    populateCL();
                     if (pixel.R > red && pixel.B < 16 && pixel.G < 15) // defined as red.
                     {
                         redPixel = new System.Drawing.Point(left + x, top + y);
@@ -480,7 +486,7 @@ namespace RatEaseW
                 sb.Append(v + "\r\n");
             }
 
-            colorText.Text = sb.ToString();
+            //colorText.Text = sb.ToString();
         }
         private BitmapImage bmi(Bitmap bitmap)
         {
