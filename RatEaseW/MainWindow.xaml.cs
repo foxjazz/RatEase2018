@@ -10,10 +10,12 @@ using System.Windows.Media.Imaging;
 using System.IO;
 using System.Text;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Threading;
 using Microsoft.Win32;
 using Brush = System.Drawing.Brush;
 using Brushes = System.Windows.Media.Brushes;
+using Color = System.Drawing.Color;
 using Image = System.Windows.Controls.Image;
 using Point = System.Drawing.Point;
 using Rectangle = System.Windows.Shapes.Rectangle;
@@ -35,7 +37,7 @@ namespace RatEaseW
             secondText.Interval = new TimeSpan(0,0,0,2);
             colorTextOn = false;
             secondText.Tick += secondText_Tick;
-            secondText.Start();
+            // secondText.Start();
             
             isSettingRect = false;
             msg = CurrentData.Instance.RedData;
@@ -83,7 +85,11 @@ namespace RatEaseW
             populateNotificationData();
             this.dcList = new ColorData();
             this.ColorList.BringIntoView();
-            this.calibrate();
+            var calibrated = this.calibrate();
+            if (calibrated)
+            {
+                this.start();
+            }
             
             
         }
@@ -181,43 +187,70 @@ namespace RatEaseW
         private void secondText_Tick(object sender, EventArgs e)
         {
             colorTextOn = true;
-            
-            state = showGreenScreen(!state);
-        }
-        public int iteration { get; set; }
-
-        private void calibrate()
-        {
-            int xx;
-            var sp = new System.Drawing.Point(left, top);
-            if (left < 50)
+            if (state)
             {
-                xx = 0;
+                gcwLocal.Left = 0;
+                gcwLocal.Top = 0;
+                if (calBitmap != null)
+                {
+                    for (int x = 0; x < calBitmap.Width; x++)
+                    {
+                        calBitmap.SetPixel(x, 0, Color.Aquamarine);
+                    }
+                    for (int x = 0; x < calBitmap.Width; x++)
+                    {
+                        calBitmap.SetPixel(x, calBitmap.Height - 1, Color.Aquamarine);
+                    }
+                    for (int x = 0; x < calBitmap.Height; x++)
+                    {
+                        calBitmap.SetPixel(0, x, Color.Aquamarine);
+                    }
+                    for (int x = 0; x < calBitmap.Height; x++)
+                    {
+                        calBitmap.SetPixel( calBitmap.Width - 1,x, Color.Aquamarine);
+                    }
+                
+                    var src = ImageHelper.ImageSourceForBitmap(calBitmap);
+                    state = showGreenScreen(state, src);
+                    
+                }
+                
+
             }
             else
             {
-                xx = left - 50;
+                state = showGreenScreen(state, null);
             }
 
-            var dp = new System.Drawing.Point(left + width, top + height);
-            curBitmap = (Bitmap)sc.Capture(sp, dp);
-            for (int x = xx; x < width + 50; x++)
+
+        }
+        public int iteration { get; set; }
+
+        private bool calibrate()
+        {
+            int xx;
+            var sp = new System.Drawing.Point(left - 20, top);
+            var dp = new System.Drawing.Point(left + 20, top + height);
+
+            calBitmap = (Bitmap)sc.Capture(sp, dp);
+            for (int x = 0; x < calBitmap.Width; x++)
             {
                 for (int y = 0; y < 200; y++)
                 {
-                    var pixel = curBitmap.GetPixel(x, y);
+                    var pixel = calBitmap.GetPixel(x, y);
                     if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                     {
-                        pixel = curBitmap.GetPixel(x, y + 1);
+                        pixel = calBitmap.GetPixel(x, y + 1);
                         if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
                         {
-                            left += y;
-                            return;
+                            left += (x - 20);
+                            return true ;
                         }
                     }
                 }
             }
-            
+
+            return false;
         }
         private void Dtimer_Tick(object sender, EventArgs e)
         {
@@ -285,6 +318,7 @@ namespace RatEaseW
         System.Drawing.Rectangle VRec;
         System.Drawing.Image curImage;
         private System.Drawing.Bitmap curBitmap;
+        private System.Drawing.Bitmap calBitmap;
         private System.Drawing.Bitmap bm2;
         private double fRed;
         public bool foundRed { get; set; }
@@ -341,7 +375,7 @@ namespace RatEaseW
             var dp = new System.Drawing.Point(left + width, top + height);
             curBitmap = (Bitmap)sc.Capture(sp, dp);
             if (RedCheck == 1 || (RedCheck % 50 == 0))
-                StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
+                StickImage.Source = ImageHelper.ImageSourceForBitmap(calBitmap);
      
                 RedStartList.Clear();
            
@@ -526,7 +560,8 @@ namespace RatEaseW
 
             }
         }
-        private void Start_Click(object sender, RoutedEventArgs e)
+
+        private void start()
         {
             ds = new DiscordSend(discordHook.Text);
             populateResult = true;
@@ -534,33 +569,33 @@ namespace RatEaseW
             {
                 width = 3;
             }
-                Properties.Settings.Default.left = left;
-                Properties.Settings.Default.top = top;
-                Properties.Settings.Default.width = width;
-                Properties.Settings.Default.height = height;
-                Properties.Settings.Default.discord = discordHook.Text;
-                Properties.Settings.Default.sftphost = sftphost.Text;
+            Properties.Settings.Default.left = left;
+            Properties.Settings.Default.top = top;
+            Properties.Settings.Default.width = width;
+            Properties.Settings.Default.height = height;
+            Properties.Settings.Default.discord = discordHook.Text;
+            Properties.Settings.Default.sftphost = sftphost.Text;
             Properties.Settings.Default.sftppw = sftppw.Password;
             Properties.Settings.Default.sftpun = sftpun.Text;
             Properties.Settings.Default.discordUrl = urlpic.Text;
 
 
-            int testWidth;  
-                if (Int32.TryParse(copyWidth.Text, out testWidth))
-                {
-                    //Only save valid option to settings
-                    cpyWidth = testWidth;
-                    Properties.Settings.Default.cpyWidth = cpyWidth.ToString();
-                }
-                Properties.Settings.Default.Save();
-       
+            int testWidth;
+            if (Int32.TryParse(copyWidth.Text, out testWidth))
+            {
+                //Only save valid option to settings
+                cpyWidth = testWidth;
+                Properties.Settings.Default.cpyWidth = cpyWidth.ToString();
+            }
+            Properties.Settings.Default.Save();
+
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
-            
+
             BtnStart.Content = "Started";
             if (gcwShowing)
             {
                 gcwLocal.Close();
-                gcwSystem.Close();   
+                gcwSystem.Close();
             }
             GreenGrid.Visibility = Visibility.Collapsed;
             Status.Background = Brushes.LightSeaGreen;
@@ -569,6 +604,10 @@ namespace RatEaseW
             dtimer.Start();
             width = 3;
             setAbs();
+        }
+        private void Start_Click(object sender, RoutedEventArgs e)
+        {
+            this.start();
 
         }
 
@@ -862,24 +901,22 @@ namespace RatEaseW
 
         }
 
-        private bool showGreenScreen(bool show)
+        private bool showGreenScreen(bool show, ImageSource src)
         {
-            gcwLocal.Left = 0;
-            gcwLocal.Top = 0;
             gcwLocal.Width = SystemParameters.PrimaryScreenWidth;
             gcwLocal.Height = SystemParameters.PrimaryScreenHeight;
             if (show)
             {
+                gcwLocal.setImage(src);
                 gcwLocal.Show();
                 gcwLocal.BringIntoView();
-
             }
             else
             {
                 gcwLocal.Hide();
             }
 
-            return show;
+            return !show;
         }
         private Rectangle Bounds;
         private void WindowScreenshotWithoutClass(String filename)

@@ -13,9 +13,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Drawing;
-
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Runtime.InteropServices;
 using Microsoft.Win32;
+using Color = System.Drawing.Color;
+using Image = System.Windows.Controls.Image;
 
 namespace RatEaseW
 {
@@ -24,13 +27,24 @@ namespace RatEaseW
     /// </summary>
     public partial class GreenScreenW : Window
     {
+        static WriteableBitmap writeableBitmap;
+        static Window w;
+        static Image i;
         public GreenScreenW()
         {
             InitializeComponent();
             //var g = new System.Drawing.Graphics()
             cd = CurrentData.Instance;
-            
+         
         }
+
+        public void setImage(ImageSource image)
+        {
+            ImageSourceConverter c = new ImageSourceConverter();
+            if (GreenImage.Source != null)
+                GreenImage.Source = image;
+        }
+        
         CurrentData cd;
         private bool IsRecSelectOn { get; set; }
         private System.Windows.Point StartPoint { get; set; }

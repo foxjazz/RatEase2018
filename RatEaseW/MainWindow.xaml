@@ -116,7 +116,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="750"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid x:Name="ColorList"  Height="442" VerticalAlignment="Bottom" Margin="24,0,370,298">
+            <Grid x:Name="ColorList"  Height="442" VerticalAlignment="Bottom" Margin="24,0,370,298" Visibility="Hidden">
                 <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <TextBlock x:Name="colorText" Foreground="#FFE9D1BC" FontSize="9" ></TextBlock>
                 </ScrollViewer>
