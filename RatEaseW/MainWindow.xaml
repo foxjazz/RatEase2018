@@ -100,13 +100,14 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Foreground="#FFE9DE19">Green Local Controls</Label>
             <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="3" Content="+ width" Click="addWidth_Click" Foreground="#FFFFD300" Background="Black" />
             <Button x:Name="subHeigth"  Grid.Row="1" Grid.Column="1" Content="- heigth" Click="subHeigth_Click" Margin="64.333,0.667,1,25" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="Black" Foreground="#FFFFD300" />
             <Button x:Name="Extend" Grid.Column="1" Content="extend" Click="extend" Grid.ColumnSpan="2" Margin="0.333,25,64,25" Grid.RowSpan="3" Foreground="#FFFAFC01" Background="Black"/>
             <Button x:Name="GreenControlMode" Grid.Row ="0" Grid.Column="3" Grid.ColumnSpan="2" Click="GreenControlMode_Click" Height="26" VerticalAlignment="Bottom" Foreground="#FFFBDF01" Background="Black">G Mode: Local</Button>
-            <TextBox x:Name="txtInterval" Grid.Column="5" IsEnabled="False" Margin="0,25" Grid.RowSpan="3"/>
+            <TextBox x:Name="txtInterval" Grid.Column="7" Grid.Row="0" IsEnabled="False" Margin="0,25" Grid.RowSpan="3" Background="#FF1F1C1C" Foreground="#FFED310F"/>
             <Slider x:Name="Interval" Grid.Column="5" Grid.ColumnSpan="2" ValueChanged="Interval_ValueChanged" Maximum="80" Minimum="1" SmallChange="1" LargeChange="10" TickFrequency="3" Margin="0,25,0,0.667" Grid.RowSpan="2" Foreground="#FFE1C909"/>
             <Button Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="4" Content="Start" Height="50" x:Name="BtnStart" VerticalAlignment="Bottom" Click="Start_Click" Unloaded="BtnStart_Unloaded" Background="#FF080100" FontSize="14" FontWeight="Bold" Margin="63,0,0,0.333" Grid.RowSpan="2" Foreground="#FFE94011" />
             <Button x:Name="testdiscord" Grid.ColumnSpan="2" Content="Test send " HorizontalAlignment="Left" Height="23" Margin="2,2,0,0" Grid.Row="3" VerticalAlignment="Top" Width="63" Click="Testdiscord_Click" Background="Black" Foreground="#FFFCFF00"/>

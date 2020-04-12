@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -98,8 +99,10 @@ namespace RatEaseW
             populateNotificationData();
             this.dcList = new ColorData();
             setData();
+            bool cal = false;
             foreach (var sl in sliverList)
             {
+                cal = true;
                 bool calibrated = this.calibrate(sl);
                 if (!calibrated)
                 {
@@ -108,12 +111,17 @@ namespace RatEaseW
                     return;
                 }
             }
-            
-           
-            this.start();
-          
-            
-          
+            if (cal)
+            {
+                this.start();
+                return;
+            }
+            width = 300;
+            setAbs();
+
+
+
+
         }
 
         private void setData()
@@ -292,11 +300,13 @@ namespace RatEaseW
         {
             if (sliverList.Count > 0)
             {
-                if (sliverList.Count <= cidxCheck )
+                
+                pullSliver(sliverList[cidxCheck]);
+                cidxCheck++;
+                if (sliverList.Count <= cidxCheck)
                 {
                     cidxCheck = 0;
                 }
-                pullSliver(sliverList[cidxCheck]);
                 return true;
             }
 
@@ -307,11 +317,12 @@ namespace RatEaseW
             dtimer.Stop();
             if (!pullNextSliver())
             {
-                var sl = new Sliver();
-                setSliver(sl);
-                sliverList.Add(sl);
+                var sl1 = new Sliver();
+                setSliver(sl1);
+                sliverList.Add(sl1);
             }
-
+            
+            var sl = sliverList[cidxCheck];
             width = 3;
             if (waitIterations > 0)
             {
@@ -332,25 +343,27 @@ namespace RatEaseW
             if ((DateTime.Now - RedCheckStart).TotalSeconds > 6)
             {
                 
-                reds = CheckRed();
+                sl.reds = CheckRed();
                 colorTextOn = false;
+                if (reds > 0)
+                {
+                    sl.hasRed = true;
+                }
+                else
+                {
+                    sl.hasRed = false;
+                }
             }
-            if (reds != redsPrev)
+            sl.redsPrev = sl.reds;
+            if (sl.reds > 0 && sl.hasRed == false)
             {
-                redCount.Text = "Reds:" + reds;
-            }
-            redsPrev = reds;
-            if (reds > 0 && RedInSystem == false)
-            {
-                RedInSystem = true;
+                sl.hasRed = true;
                 RedCheckStart = DateTime.Now;
-                redCount.Text = "Reds:" + reds;
                 PlaySound();
             }
-            if (reds == 0 && RedInSystem )
+            if (sl.reds == 0 && sl.hasRed )
             {
-                redCount.Text = "Reds:" + reds;
-                RedInSystem = false;
+                sl.hasRed = false;
                 PlaySound();
             }
             cnt = 0;
@@ -421,7 +434,7 @@ namespace RatEaseW
             var dp = new System.Drawing.Point(left + width, top + height);
             curBitmap = (Bitmap)sc.Capture(sp, dp);
             if (RedCheck == 1 || (RedCheck % 50 == 0))
-                StickImage.Source = ImageHelper.ImageSourceForBitmap(calBitmap);
+                StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
      
                 RedStartList.Clear();
            
@@ -554,16 +567,23 @@ namespace RatEaseW
 
             try
             {
-                
-                if (RedInSystem == false)
+                var sl = sliverList[cidxCheck];
+                bool allclear = true;
+                foreach (var s3 in sliverList)
+                {
+                    if (s3.hasRed)
+                        allclear = false;
+                }
+                if (allclear)
                 {
                     player.SoundLocation = Properties.Settings.Default.AllClearSoundFile;
                     
                 }
-                else
+                else if (sl.hasRed)
                 {
                     copyForDiscord();
-                    player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
+                    player.SoundLocation = sl.alert;
+                    // player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
 
                 }
                 if (player.SoundLocation == null || player.SoundLocation.Length < 2)
@@ -580,8 +600,6 @@ namespace RatEaseW
             {
                 MessageBox.Show(ex.Message + " could not find sound file:" + Properties.Settings.Default.AlertSoundFile);
             }
-           
-
         }
         private void copyForDiscord()
         {
@@ -672,6 +690,9 @@ namespace RatEaseW
             Properties.Settings.Default.AlertSoundFile = openFileDialog1.FileName;
             Properties.Settings.Default.Save();
             player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
+
+            var sl = sliverList[cidxCheck];
+            sl.alert = player.SoundLocation;
             player.Load();
             player.Play();
         }
@@ -684,11 +705,22 @@ namespace RatEaseW
                 openFileDialog1.InitialDirectory = System.IO.Path.GetDirectoryName(f);
             }
             openFileDialog1.ShowDialog();
-            Properties.Settings.Default.AllClearSoundFile = openFileDialog1.FileName;
-            Properties.Settings.Default.Save();
-            player.SoundLocation = Properties.Settings.Default.AllClearSoundFile;
-            player.Load();
-            player.Play();
+            try
+            {
+                player.Load();
+                player.Play();
+                Properties.Settings.Default.AllClearSoundFile = openFileDialog1.FileName;
+                Properties.Settings.Default.Save();
+
+
+                player.SoundLocation = Properties.Settings.Default.AllClearSoundFile;
+            }
+            catch
+            {
+
+            }
+
+
         }
         private void setAbs()
         {
@@ -714,7 +746,7 @@ namespace RatEaseW
                 width = 4;
             if (height < 0)
                 height = 150;
-            width = 500;
+            width = 300;
             GreenControlMode.Content = "G Mode: Local";
             GreenGrid.Visibility = Visibility.Visible;
             Status.Background = Brushes.LightCoral;
@@ -1098,6 +1130,7 @@ namespace RatEaseW
 
         private void CheckNextSliver_Click(object sender, RoutedEventArgs e)
         {
+            cidxCheck++;
             if (sliverList.Count > 0)
             {
                 if (sliverList.Count <= cidxCheck)
@@ -1109,7 +1142,7 @@ namespace RatEaseW
               
                 setAbs();
                 UpdateIndex.Text = $"{cidxCheck}";
-                cidxCheck++;
+                
                 
             }
 
