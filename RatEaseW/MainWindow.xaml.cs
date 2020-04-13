@@ -103,11 +103,13 @@ namespace RatEaseW
             foreach (var sl in sliverList)
             {
                 cal = true;
+                sl.hasRed = false;
+                sl.width = 300;
                 bool calibrated = this.calibrate(sl);
                 if (!calibrated)
                 {
-                    width = 300;
-                    setAbs();
+                    setUpRectangle();
+                    cal = false;
                     return;
                 }
             }
@@ -270,8 +272,8 @@ namespace RatEaseW
         private bool calibrate(Sliver sl)
         {
             int xx;
-            var sp = new System.Drawing.Point(left - 20, top);
-            var dp = new System.Drawing.Point(left + 20, top + height);
+            var sp = new System.Drawing.Point(sl.left - 20, top);
+            var dp = new System.Drawing.Point(sl.left + 20, top + height);
 
             calBitmap = (Bitmap)sc.Capture(sp, dp);
             for (int x = 0; x < calBitmap.Width; x++)
@@ -288,6 +290,13 @@ namespace RatEaseW
                             sl.calibrated = true;
                             return true ;
                         }
+                        pixel = calBitmap.GetPixel(x, y + 2);
+                        if (pixel.R == 255 && pixel.G == 255 && pixel.B == 255)
+                        {
+                            sl.left += (x - 20);
+                            sl.calibrated = true;
+                            return true;
+                        }
                     }
                 }
             }
@@ -296,33 +305,32 @@ namespace RatEaseW
             return false;
         }
 
-        private bool pullNextSliver()
+        private Sliver pullSliverAdvance()
         {
+            Sliver sl = sliverList[cidxCheck];
             if (sliverList.Count > 0)
             {
-                
-                pullSliver(sliverList[cidxCheck]);
+                pullSliver(sl);
                 cidxCheck++;
                 if (sliverList.Count <= cidxCheck)
                 {
                     cidxCheck = 0;
                 }
-                return true;
+
+                return sl;
             }
 
-            return false;
+            return null;
         }
         private void Dtimer_Tick(object sender, EventArgs e)
         {
             dtimer.Stop();
-            if (!pullNextSliver())
+            Sliver sl = pullSliverAdvance();
+            if (sl == null)
             {
-                var sl1 = new Sliver();
-                setSliver(sl1);
-                sliverList.Add(sl1);
+                setUpRectangle();
+                return;
             }
-            
-            var sl = sliverList[cidxCheck];
             width = 3;
             if (waitIterations > 0)
             {
@@ -345,26 +353,19 @@ namespace RatEaseW
                 
                 sl.reds = CheckRed();
                 colorTextOn = false;
-                if (reds > 0)
-                {
-                    sl.hasRed = true;
-                }
-                else
-                {
-                    sl.hasRed = false;
-                }
+         
             }
             sl.redsPrev = sl.reds;
             if (sl.reds > 0 && sl.hasRed == false)
             {
                 sl.hasRed = true;
                 RedCheckStart = DateTime.Now;
-                PlaySound();
+                PlaySound(sl);
             }
             if (sl.reds == 0 && sl.hasRed )
             {
                 sl.hasRed = false;
-                PlaySound();
+                PlaySound(sl);
             }
             cnt = 0;
             iteration = 0;
@@ -562,12 +563,12 @@ namespace RatEaseW
         // SmaRedis subred;
         public int RedCount { get; set; }
         
-        private void PlaySound()
+        private void PlaySound(Sliver sl)
         {
 
             try
             {
-                var sl = sliverList[cidxCheck];
+        
                 bool allclear = true;
                 foreach (var s3 in sliverList)
                 {
@@ -728,9 +729,9 @@ namespace RatEaseW
             VImage.Source = ImageHelper.ScreenShotImageSource(left, top, width, height);
             coord.Text = $"L:{(int)left}, T:{(int)top} W:{(int)width} H:{(int)height}";
         }
-        private void SetRectangle(object sender, RoutedEventArgs e)
-        {
 
+        private void setUpRectangle()
+        {
             dtimer.Stop();
             BtnStart.Content = "Start";
             isSettingRect = true;
@@ -752,7 +753,10 @@ namespace RatEaseW
             Status.Background = Brushes.LightCoral;
             Status.Content = "Stopped";
             setAbs();
-
+        }
+        private void SetRectangle(object sender, RoutedEventArgs e)
+        {
+            setUpRectangle();
         }
         private void addWidth_Click(object sender, RoutedEventArgs e)
         {
@@ -1120,6 +1124,7 @@ namespace RatEaseW
         private void SaveAdd_Click(object sender, RoutedEventArgs e)
         {
             var sl = new Sliver();
+            width = 300;
             setSliver(sl);
             sliverList.Add(sl);
             currentIdx++;
@@ -1130,20 +1135,19 @@ namespace RatEaseW
 
         private void CheckNextSliver_Click(object sender, RoutedEventArgs e)
         {
-            cidxCheck++;
+            
             if (sliverList.Count > 0)
             {
+                cidxCheck++;
                 if (sliverList.Count <= cidxCheck)
                 {
                     cidxCheck = 0;
                 }
                 var sliver = sliverList[cidxCheck];
                 pullSliver(sliver);
-              
                 setAbs();
                 UpdateIndex.Text = $"{cidxCheck}";
-                
-                
+
             }
 
         }
