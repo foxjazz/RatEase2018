@@ -15,7 +15,7 @@ namespace RatEaseW
         public int height { get; set; }
         public bool calibrated { get; set; }
         public bool hasRed { get; set; }
-        public string alert { get; set; }
+        public string alertSoundFilename { get; set; }
         public int redsPrev { get; set; }
         public int reds { get; set; }
 

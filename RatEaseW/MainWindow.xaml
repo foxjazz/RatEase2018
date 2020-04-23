@@ -51,16 +51,7 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="4" Grid.RowSpan="3" Grid.ColumnSpan="3">
                 <TextBlock x:Name="coordinateList"  Text="Init" Foreground="#FFEAD91A" FontSize="11"></TextBlock>
             </ScrollViewer>
-            <Button x:Name="ResetIdx" Grid.Row="4" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Height="25" Margin="0.333,0,0,0" VerticalAlignment="Top" Click="ResetIdx_Click">Reset Idx</Button>
-            <Button x:Name="SaveAdd" Grid.Row="5" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Click="SaveAdd_Click" FontSize="10">Save / Add</Button>
-            <Button x:Name="CheckNextSliver" Grid.Row="6" Grid.Column="6" Background="#FF0E1209" Foreground="#FFAD18CA" Click="CheckNextSliver_Click" FontSize="9">Check Next</Button>
-            <Button x:Name="Update" Grid.Row="6" Grid.Column="8" Background="#FF0E1209" Foreground="#FFAD18CA" Click="Update_Click_1" FontSize="9">Update</Button>
-            <Label Grid.Row="4" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18">Index</Label>
-            <Label Grid.Row="4" Grid.Column="8" Background="#FF0E1209" Foreground="#FF5BCA18">Saved</Label>
-            <TextBox x:Name="Saved" Grid.Row="5" Grid.Column="8" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
-            <TextBox x:Name="CurrentIndex" Grid.Row="5" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
-            <TextBox x:Name="UpdateIndex" Grid.Row="6" Grid.Column="7" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
-            <Label x:Name="EveSystem" Grid.Column="1" Content="System:" Background="Black" Foreground="#FFFFEA00" />
+               <Label x:Name="EveSystem" Grid.Column="1" Content="System:" Background="Black" Foreground="#FFFFEA00" />
             <Button x:Name="SetREctangle" Grid.Column="4" Content="Set red sliver" HorizontalAlignment="Right" Width="150" Grid.ColumnSpan="3" Margin="0,3,0,24" Click="SetRectangle" Foreground="#FFEDFF04" Background="#FF240202" Grid.RowSpan="2"/>
             <!--<Button x:Name="SetSystemRectanglee" Grid.Column="5" Grid.Row="0" Grid.ColumnSpan="2" Content="Set System Rectangle" HorizontalAlignment="Right" Width="120" Click="SetSystemRectangle" MouseRightButtonUp="SetSystemRectanglee_MouseRightButtonUp" Height="25" VerticalAlignment="Bottom"/>-->
 
@@ -79,7 +70,7 @@
             <TextBox x:Name="esystem" Grid.ColumnSpan="2" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="5,3,0,0" TextWrapping="Wrap" Text="testing" VerticalAlignment="Top" Width="120" Foreground="#FFFECB05" Background="Black"/>
             <Label x:Name="Diag" Content="Diag" Grid.Column="8" HorizontalAlignment="Left" Height="24" Margin="24.333,3,0,0" Grid.Row="3" VerticalAlignment="Top" Width="32" Grid.RowSpan="2"/>
         </Grid>
-        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="225" Margin="0,21.667,0,0" VerticalAlignment="Top" Width="450" Grid.Row="1" Grid.RowSpan="2">
+        <Grid x:Name="GreenGrid" HorizontalAlignment="Left" Height="225" Margin="0,21.667,0,0" VerticalAlignment="Top" Width="610" Grid.Row="1" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="25"></RowDefinition>
                 <RowDefinition Height="25"></RowDefinition>
@@ -101,7 +92,22 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
+            <Button x:Name="ResetIdx" Grid.Row="0" Grid.Column="9" Background="#FF0E1209" Foreground="#FFAD18CA" Height="25" Margin="0.333,0,0,0" VerticalAlignment="Top" Click="ResetIdx_Click">Reset Idx</Button>
+            <Button x:Name="SaveAdd" Grid.Row="1" Grid.Column="9" Background="#FF0E1209" Foreground="#FFAD18CA" Click="SaveAdd_Click" FontSize="10">Save / Add</Button>
+            <Button x:Name="CheckNextSliver" Grid.Row="2" Grid.Column="9" Background="#FF0E1209" Foreground="#FFAD18CA" Click="CheckNextSliver_Click" FontSize="9">Check Next</Button>
+            <Button x:Name="Update" Grid.Row="2" Grid.Column="11" Background="#FF0E1209" Foreground="#FFAD18CA" Click="Update_Click_1" FontSize="9">Update</Button>
+            <Label Grid.Row="0" Grid.Column="10" Background="#FF0E1209" Foreground="#FF5BCA18">Index</Label>
+            <Label Grid.Row="0" Grid.Column="11" Background="#FF0E1209" Foreground="#FF5BCA18">Saved</Label>
+            <TextBox x:Name="Saved" Grid.Row="1" Grid.Column="11" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
+            <TextBox x:Name="CurrentIndex" Grid.Row="1" Grid.Column="10" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
+            <TextBox x:Name="UpdateIndex" Grid.Row="2" Grid.Column="10" Background="#FF0E1209" Foreground="#FF5BCA18"></TextBox>
+            <Button x:Name="Remove" Grid.Row="1" Grid.Column="8" Background="#FF0E1209" Foreground="#FFAD18CA" FontSize="9" Click="Remove_Click">Remove</Button>
+
             <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Foreground="#FFE9DE19">Green Local Controls</Label>
             <Button x:Name="addWidth"  Grid.Row="1" Grid.Column="3" Content="+ width" Click="addWidth_Click" Foreground="#FFFFD300" Background="Black" />
             <Button x:Name="subHeigth"  Grid.Row="1" Grid.Column="1" Content="- heigth" Click="subHeigth_Click" Margin="64.333,0.667,1,25" Grid.ColumnSpan="2" Grid.RowSpan="2" Background="Black" Foreground="#FFFFD300" />

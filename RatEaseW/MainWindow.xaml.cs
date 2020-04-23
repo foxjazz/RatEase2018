@@ -100,8 +100,18 @@ namespace RatEaseW
             this.dcList = new ColorData();
             setData();
             bool cal = false;
+            if (sliverList == null || sliverList.Count == 0)
+            {
+                width = 300;
+                setAbs();
+                setUpRectangle();
+            }
             foreach (var sl in sliverList)
             {
+                if (sl.alertSoundFilename == null || sl.alertSoundFilename.Length < 2)
+                {
+                    sl.alertSoundFilename = Properties.Settings.Default.AlertSoundFile;
+                }
                 cal = true;
                 sl.hasRed = false;
                 sl.width = 300;
@@ -203,7 +213,7 @@ namespace RatEaseW
         private int sLeft;
         public ScreenCapture sc { get; set; }
         FileDialog openFileDialog1;
-        byte red = 130;
+        byte red = 142;
         private int redV;
         private List<int> RedStartList;
         private List<RedTopHeight> listRedTopHeight;
@@ -437,7 +447,7 @@ namespace RatEaseW
             if (RedCheck == 1 || (RedCheck % 50 == 0))
                 StickImage.Source = ImageHelper.ImageSourceForBitmap(curBitmap);
      
-                RedStartList.Clear();
+            RedStartList.Clear();
            
 
             int xRedPosition = -1;
@@ -460,7 +470,7 @@ namespace RatEaseW
                         dcList.setD(pixel.R, pixel.G, pixel.B, y);
                         populateCL();
                     }
-                    if (pixel.R > red && pixel.B < 16 && pixel.G < 15) // defined as red.
+                    if (pixel.R > red && pixel.B < 12 && pixel.G < 12) // defined as red.
                     {
                         redPixel = new System.Drawing.Point(left + x, top + y);
                         foundRed = true;
@@ -583,7 +593,7 @@ namespace RatEaseW
                 else if (sl.hasRed)
                 {
                     copyForDiscord();
-                    player.SoundLocation = sl.alert;
+                    player.SoundLocation = sl.alertSoundFilename;
                     // player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
 
                 }
@@ -635,6 +645,18 @@ namespace RatEaseW
                 width = 3;
             }
 
+            if (sliverList.Count == 0)
+            {
+                MessageBox.Show("Add a sliver using Save/Add");
+                return;
+            }
+            foreach (var sl in sliverList)
+            {
+                if (sl.alertSoundFilename == null || sl.alertSoundFilename.Length < 2)
+                {
+                    sl.alertSoundFilename = Properties.Settings.Default.AlertSoundFile;
+                }
+            }
             Properties.Settings.Default.SliverList = ObjectToString(sliverList);
             Properties.Settings.Default.left = left;
             Properties.Settings.Default.top = top;
@@ -680,7 +702,7 @@ namespace RatEaseW
 
         private void SetAlertSound_Click(object sender, RoutedEventArgs e)
         {
-            openFileDialog1.Title = "Pick sound alert file";
+            openFileDialog1.Title = "Pick sound alertSoundFilename file";
             if (Properties.Settings.Default.AlertSoundFile.Length > 0)
             {
                 string f = Properties.Settings.Default.AlertSoundFile;
@@ -693,7 +715,7 @@ namespace RatEaseW
             player.SoundLocation = Properties.Settings.Default.AlertSoundFile;
 
             var sl = sliverList[cidxCheck];
-            sl.alert = player.SoundLocation;
+            sl.alertSoundFilename = player.SoundLocation;
             player.Load();
             player.Play();
         }
@@ -1177,6 +1199,11 @@ namespace RatEaseW
             var sl = sliverList[cidxCheck];
             setSliver(sl);
             setData();
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            sliverList.RemoveAt(cidxCheck);
         }
 
         public object StringToObject(string base64String)
