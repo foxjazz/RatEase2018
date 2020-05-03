@@ -18,6 +18,6 @@ namespace RatEaseW
         public string alertSoundFilename { get; set; }
         public int redsPrev { get; set; }
         public int reds { get; set; }
-
+        public bool Active { get; set; }
     }
 }
