@@ -9,7 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.LiteDB" Version="2.6.0" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
-    <PackageReference Include="MessagePack" Version="1.7.3.4" />
+    <PackageReference Include="MessagePack" Version="1.9.11" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="System.Drawing.Common" Version="4.5.0" />
   </ItemGroup>
